@@ -35,6 +35,12 @@ import { ChevronLeft, ChevronRight, Inbox } from 'lucide-react'
 import { cn } from '../../lib/utils'
 import { DOTS, usePaginationRange } from '../../lib/hook/usePaginationRange'
 
+declare module '@tanstack/react-table' {
+  interface ColumnMeta<TData extends unknown, TValue> {
+    size?: string
+  }
+}
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
@@ -146,13 +152,13 @@ function DataTablePagination<TData>({
           table.setPageSize(Number(value))
         }}
       >
-        <SelectTrigger className="h-6 w-[120px] px-2">
+        <SelectTrigger className="h-6 w-fit px-2">
           <SelectValue>{`${
             table.getState().pagination.pageSize
           } 件 / ページ`}</SelectValue>
         </SelectTrigger>
         <SelectContent>
-          {[5, 10, 20, 30, 40, 50].map((pageSize) => (
+          {[10, 20, 50, 100].map((pageSize) => (
             <SelectItem key={pageSize} value={`${pageSize}`}>
               {pageSize} 件 / ページ
             </SelectItem>
@@ -167,7 +173,7 @@ function DataTablePagination<TData>({
             value={jumpToPage}
             onChange={(e) => setJumpToPage(e.target.value)}
             onKeyDown={handleJumpToPage}
-            className="h-6 w-16 text-center flex items-center justify-center p-0"
+            className="flex h-6 w-16 items-center justify-center p-0 text-center"
             min={1}
             max={table.getPageCount()}
           />
@@ -227,18 +233,21 @@ export function DataTable<TData, TValue>({
     <div className="space-y-2">
       <DataTablePagination table={table} rowCount={rowCount} />
       <div className="rounded-md">
-        <Table>
+        <Table className="table-fixed">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
-                className={cn('border-b font-bold border-border')}
+                className={cn('border-b border-border font-bold')}
                 key={headerGroup.id}
               >
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead
-                      className="px-0 font-bold bg-muted"
+                      className="bg-muted px-0 font-bold"
                       key={header.id}
+                      style={{
+                        width: header.column.columnDef.meta?.size,
+                      }}
                     >
                       {header.isPlaceholder
                         ? null
@@ -260,16 +269,14 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && 'selected'}
                   onClick={() => onClickRow && onClickRow(row.original)}
                   className={cn(
-                    'border-b border-border transition-all duration-200', // UPDATED
-                    'data-[state=selected]:bg-accent/70 data-[state=selected]:font-normal', // UPDATED (using accent with some opacity)
+                    'border-b border-border transition-all duration-200',
+                    'data-[state=selected]:bg-accent/70 data-[state=selected]:font-normal',
                     { 'cursor-pointer': onClickRow }
                   )}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
-                      className={cn('text-bold', {
-                        'bg-accent/50': cell.column.getIsSorted(),
-                      })}
+                      className={cn('text-bold break-words')}
                       key={cell.id}
                     >
                       {flexRender(

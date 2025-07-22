@@ -36,6 +36,7 @@ import { SearchPropsMasterSetting } from '../../../types/master-setting'
 import { MasterRdsEntity } from '../../../types/MasterRdsEntity'
 import { MasterRdsListEntity } from '../../../types/MasterRdsListEntity'
 import { PaginateProps } from '../../../types/pagination'
+import { DataTableColumnHeader } from '../../../components/table/data-table-column-header'
 
 export default function MasterSetting() {
   const user = useUserContext()
@@ -132,24 +133,16 @@ export default function MasterSetting() {
     () => [
       {
         accessorKey: 'code',
+        meta: {
+          size: '25%',
+        },
         header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              className="font-bold flex justify-between items-center w-full !rounded-none"
-              onClick={() =>
-                column.toggleSorting(column.getIsSorted() === 'asc')
-              }
-            >
-              コード
-              <SortIndicator sortState={column.getIsSorted()} />
-            </Button>
-          )
+          return <DataTableColumnHeader column={column} title="コード" />
         },
         cell: ({ row }) => (
           <Link
             prefetch={false}
-            className="hover:text-[hsl(var(--primary))] text-[hsl(var(--primary))] hover:underline w-[200px] block overflow-clip break-words"
+            className="block w-full overflow-clip break-words text-[hsl(var(--primary))] hover:text-[hsl(var(--primary))] hover:underline"
             href={`${
               urlProvider.DATA_PAGE_URL
             }?isTypeCodeFixed=1&typeCode=${encodeURIComponent(
@@ -162,31 +155,28 @@ export default function MasterSetting() {
       },
       {
         accessorKey: 'name',
+        meta: {
+          size: '25%',
+        },
         header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              className="font-bold flex justify-between items-center w-full !rounded-none"
-              onClick={() =>
-                column.toggleSorting(column.getIsSorted() === 'asc')
-              }
-            >
-              名称
-              <SortIndicator sortState={column.getIsSorted()} />
-            </Button>
-          )
+          return <DataTableColumnHeader column={column} title="名称" />
         },
       },
       {
         accessorKey: 'attributes.description',
+        meta: {
+          size: '50%',
+        },
         header: () => {
           return (
-            <div className="px-4 font-bold flex justify-between items-center w-full">
+            <div className="flex w-full items-center justify-between px-4 font-bold">
               説明
             </div>
           )
         },
-        cell: ({ row }) => row.original.attributes['description'],
+        cell: ({ row }) => (
+          <div className="px-4">{row.original.attributes['description']}</div>
+        ),
       },
     ],
     [tenantCode]
@@ -217,7 +207,7 @@ export default function MasterSetting() {
 
   return (
     <>
-      <div className="w-full flex justify-center">
+      <div className="flex w-full justify-center">
         <div className="w-full py-3">
           <Form {...form}>
             <form
@@ -226,8 +216,8 @@ export default function MasterSetting() {
                 onSubmitSearch(onValid)
               })}
             >
-              <div className="w-full flex-col flex w-fullitems-center justify-center  px-3 ">
-                <div className="flex gap-10 w-full">
+              <div className="flex w-full flex-col items-center justify-center px-3">
+                <div className="flex w-full gap-10">
                   <div className="flex w-fit flex-col gap-4">
                     <div className="lg:text-md flex h-10 items-center text-sm font-semibold">
                       コード
@@ -276,7 +266,7 @@ export default function MasterSetting() {
                   </div>
                 </div>
               </div>
-              <div className="flex mt-3 justify-end gap-5 px-3">
+              <div className="mt-3 flex justify-end gap-5 px-3">
                 <Button type="submit">
                   <Search className="mr-2 h-4 w-4" />
                   検索
@@ -287,7 +277,7 @@ export default function MasterSetting() {
         </div>
       </div>
 
-      <div className="mx-3 pt-3 flex justify-end mb-2">
+      <div className="mx-3 mb-2 flex justify-end pt-3">
         <CommonButton variant="primary" onClick={onClickCreate}>
           新規作成
         </CommonButton>
