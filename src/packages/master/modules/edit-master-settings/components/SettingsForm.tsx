@@ -363,7 +363,7 @@ export default function SettingsForm({
             <div className="flex items-end justify-start bg-emphasis p-4 text-xl font-bold text-white">
               <div>名称登録</div>
             </div>
-            <div className="grid gap-x-10 bg-background p-6 pb-10 md:grid-cols-2">
+            <div className="grid gap-x-10 gap-y-2 bg-background p-6 pb-10 md:grid-cols-2">
               <FormField
                 control={form.control}
                 name="code"
