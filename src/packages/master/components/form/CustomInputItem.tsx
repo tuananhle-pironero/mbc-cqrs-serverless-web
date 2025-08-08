@@ -35,7 +35,7 @@ export default function CustomInputItem({
         </label>
       )}
 
-      <div className="relative col-span-2 mt-2 flex-col">
+      <div className="flex-column relative col-span-2 mt-2">
         {children}
         {description && (
           <p
