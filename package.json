@@ -9,10 +9,45 @@
     "dist"
   ],
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+    "./styles": {
+      "types": "./dist/styles.d.ts",
+      "import": "./dist/styles.mjs",
+      "require": "./dist/styles.js"
+    },
+    "./MasterSetting": {
+      "types": "./dist/MasterSetting.d.ts",
+      "import": "./dist/MasterSetting.mjs",
+      "require": "./dist/MasterSetting.js"
+    },
+    "./MasterData": {
+      "types": "./dist/MasterData.d.ts",
+      "import": "./dist/MasterData.mjs",
+      "require": "./dist/MasterData.js"
+    },
+    "./EditMasterSettings": {
+      "types": "./dist/EditMasterSettings.d.ts",
+      "import": "./dist/EditMasterSettings.mjs",
+      "require": "./dist/EditMasterSettings.js"
+    },
+    "./EditMasterData": {
+      "types": "./dist/EditMasterData.d.ts",
+      "import": "./dist/EditMasterData.mjs",
+      "require": "./dist/EditMasterData.js"
+    },
+    "./AppProviders": {
+      "types": "./dist/AppProviders.d.ts",
+      "import": "./dist/AppProviders.mjs",
+      "require": "./dist/AppProviders.js"
+    },
+    "./UrlProvider": {
+      "types": "./dist/UrlProvider.d.ts",
+      "import": "./dist/UrlProvider.mjs",
+      "require": "./dist/UrlProvider.js"
+    },
+    "./MsLayout": {
+      "types": "./dist/MsLayout.d.ts",
+      "import": "./dist/MsLayout.mjs",
+      "require": "./dist/MsLayout.js"
     },
     "./styles.css": "./dist/styles.css"
   },
