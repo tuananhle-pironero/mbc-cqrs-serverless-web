@@ -490,7 +490,7 @@ export default function MasterData() {
             </AccordionTrigger>
             <AccordionContent className="flex flex-col justify-center">
               <>
-                <div className="my-1 flex justify-end gap-4 px-3">
+                <div className="my-3 flex justify-end gap-4 px-3">
                   <Button
                     onClick={() =>
                       router.push(

@@ -8,7 +8,8 @@ import { useLoadingStore } from '../../../lib/stores/hooks'
 import { useHttpClient } from '../../../provider'
 import { SettingDataEntity } from '../../../types'
 import SettingsForm from '../components/SettingsForm'
-
+import '../../../components/JsonEditor'
+import '../../../components/RichTextEditor'
 export default function EditMasterSettings() {
   const rawParams = useParams<{ pk?: string; sk?: string }>()
   const params = {
