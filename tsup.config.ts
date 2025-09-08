@@ -3,8 +3,17 @@ import { exec } from 'child_process'
 
 export default defineConfig({
   entry: {
-    index: 'src/packages/master/index.ts',
     styles: 'src/packages/master/styles.ts',
+    MasterSetting:
+      'src/packages/master/modules/master-settings/templates/index.tsx',
+    MasterData: 'src/packages/master/modules/master-data/templates/index.tsx',
+    EditMasterSettings:
+      'src/packages/master/modules/edit-master-settings/templates/index.tsx',
+    EditMasterData:
+      'src/packages/master/modules/edit-master-data/templates/index.tsx',
+    AppProviders: 'src/packages/master/provider.tsx',
+    UrlProvider: 'src/packages/master/lib/constants/url.ts',
+    MsLayout: 'src/packages/master/components/MsLayout.tsx',
   },
   format: ['cjs', 'esm'],
   dts: true,
