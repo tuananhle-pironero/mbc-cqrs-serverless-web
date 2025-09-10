@@ -167,30 +167,68 @@ export default function EditMasterData() {
     setSubmitting(true)
 
     try {
+      const processedData = JSON.parse(JSON.stringify(data))
+
+      // Iterate through the master setting's field definitions to find JSON fields.
+      currentSetting.attributes.fields.forEach((field) => {
+        // Check if the field is of type 'json' and if a value for it exists in the form data.
+        if (
+          field.dataType === 'json' &&
+          processedData.attributes?.[field.physicalName]
+        ) {
+          // The value from the JSON editor is a string, so it needs to be parsed into an object.
+          try {
+            const valueAsString = processedData.attributes[field.physicalName]
+            // Ensure we don't try to parse something that is already an object.
+            if (typeof valueAsString === 'string') {
+              processedData.attributes[field.physicalName] =
+                JSON.parse(valueAsString)
+            }
+          } catch (error) {
+            console.error(
+              `Error parsing JSON for field '${field.physicalName}':`,
+              error
+            )
+            // Optional: Display an error to the user and stop submission.
+            toast({
+              title: 'JSON形式エラー',
+              description: `${field.name}のJSON形式が正しくありません。`, // "Invalid JSON format for field [field name]."
+              variant: 'destructive',
+            })
+            setSubmitting(false) // Stop the submission process.
+            // Throw an error to exit the function execution.
+            throw new Error('Invalid JSON format')
+          }
+        }
+      })
+
       const client = httpClient
       let seq =
-        isNullish(data?.attributes?.seq) || data?.attributes?.seq === ''
+        isNullish(processedData?.attributes?.seq) ||
+        processedData?.attributes?.seq === ''
           ? undefined
-          : +data?.attributes?.seq
+          : +processedData?.attributes?.seq
       if (
         isEdit &&
-        (isNullish(data?.attributes?.seq) || data?.attributes?.seq === '')
+        (isNullish(processedData?.attributes?.seq) ||
+          processedData?.attributes?.seq === '')
       ) {
         seq = 0
       }
-      const settingCode = data.settingCode?.split('#')[1]
+      const settingCode = processedData.settingCode?.split('#')[1]
       const codeField = currentSetting.attributes.fields.find(
         (field) => field.physicalName === 'code'
       )
       let result: DataSettingDataEntity | undefined
 
       if (isEdit) {
+        // Use the processedData for the payload.
         const payload = {
-          ...data,
+          ...processedData,
           seq,
           ...(isExistCodeInFields && {
-            code: data.attributes['code'],
-            name: data.attributes['name'],
+            code: processedData.attributes['code'],
+            name: processedData.attributes['name'],
           }),
         }
 
@@ -202,8 +240,8 @@ export default function EditMasterData() {
         ).data
       } else {
         let generatedCode = isExistCodeInFields
-          ? data.attributes['code']?.trim()
-          : data.code
+          ? processedData.attributes['code']?.trim()
+          : processedData.code
 
         if (codeField?.dataType === 'auto_number' && codeField.dataFormat) {
           if (codeField['formatCode']) {
@@ -256,8 +294,9 @@ export default function EditMasterData() {
           }
         }
 
+        // Use the processedData for the payload.
         const commonPayload = {
-          ...data,
+          ...processedData,
           settingCode,
           seq,
         }
@@ -265,17 +304,17 @@ export default function EditMasterData() {
         const payload = isExistCodeInFields
           ? {
               ...commonPayload,
-              name: data.attributes['name'],
+              name: processedData.attributes['name'],
               code: generatedCode,
               attributes: {
-                ...data.attributes,
+                ...processedData.attributes,
                 code: generatedCode,
               },
             }
           : {
               ...commonPayload,
               attributes: {
-                ...data.attributes,
+                ...processedData.attributes,
                 code: generatedCode,
               },
             }
@@ -302,12 +341,22 @@ export default function EditMasterData() {
         start(result.requestId)
       }
     } catch (error) {
-      setSubmitting(false)
-      toast({
-        title: 'エラーが発生しました。',
-        description: 'ネットワークまたはサーバーエラーの可能性があります。',
-        variant: 'destructive',
-      })
+      // The catch block will now also handle the thrown 'Invalid JSON format' error.
+      if (error.message !== 'Invalid JSON format') {
+        setSubmitting(false)
+        toast({
+          title: 'エラーが発生しました。',
+          description: 'ネットワークまたはサーバーエラーの可能性があります。',
+          variant: 'destructive',
+        })
+      } else {
+        setSubmitting(false)
+        toast({
+          title: 'エラーが発生しました。',
+          description: 'ネットワークまたはサーバーエラーの可能性があります。',
+          variant: 'destructive',
+        })
+      }
     }
   }
 
@@ -921,18 +970,37 @@ export default function EditMasterData() {
                             field.isRequired === true
                               ? '入力してください。'
                               : false,
+                          // Add a validation rule to ensure the string is valid JSON
+                          validate: (value) => {
+                            if (!value && !field.isRequired) return true
+                            try {
+                              // The editor passes a string, so we try to parse it
+                              JSON.parse(value)
+                              return true
+                            } catch (e) {
+                              return 'JSONの形式が正しくありません。' // "Invalid JSON format."
+                            }
+                          },
                         }}
                         defaultValue={field.defaultValue}
-                        render={({ field: { onChange, value } }) => (
-                          <div className="h-[500px]">
-                            <JSONEditorComponent
-                              disabled={readOnly}
-                              key={`${currentSetting.id}_${field.physicalName}_json`}
-                              text={value}
-                              onChangeText={(text) => onChange(text)}
-                            />
-                          </div>
-                        )}
+                        render={({ field: { onChange, value } }) => {
+                          // Ensure the value passed to the editor is always a string.
+                          const stringValue =
+                            typeof value === 'object' && value !== null
+                              ? JSON.stringify(value, null, 2)
+                              : value || ''
+
+                          return (
+                            <div className="h-[500px]">
+                              <JSONEditorComponent
+                                disabled={readOnly}
+                                key={`${currentSetting.id}_${field.physicalName}_json`}
+                                text={stringValue}
+                                onChangeText={(text) => onChange(text)}
+                              />
+                            </div>
+                          )
+                        }}
                       />
                     ) : field.dataType === 'number' ? (
                       <Input

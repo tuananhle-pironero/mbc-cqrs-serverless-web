@@ -165,6 +165,15 @@ export default function SettingsForm({
                 item.defaultValue === 'true' || item.defaultValue === true,
             }
           }
+          if (item.dataType === 'json') {
+            return {
+              ...item,
+              uiComponent: 'string',
+              defaultValue: item.defaultValue
+                ? JSON.parse(item.defaultValue as string)
+                : '',
+            }
+          }
           return {
             ...item,
             uiComponent: 'string',
