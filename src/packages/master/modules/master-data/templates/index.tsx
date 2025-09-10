@@ -228,13 +228,40 @@ export default function MasterData() {
               const value = getValue()
               const dataType = item.dataType
 
+              // Added a specific handler for the 'json' dataType.
+              if (dataType === 'json') {
+                // Ensure we don't render null/undefined or empty objects.
+                if (
+                  value === null ||
+                  typeof value !== 'object' ||
+                  Object.keys(value).length === 0
+                ) {
+                  return <span className="italic text-gray-400">empty</span>
+                }
+                // Pretty-print the JSON object for readability.
+                const formattedJson = JSON.stringify(value, null, 2)
+                return (
+                  <pre className="max-h-24 overflow-y-auto rounded-md bg-gray-100 p-2 text-xs dark:bg-gray-800">
+                    <code>{formattedJson}</code>
+                  </pre>
+                )
+              }
+
+              // Updated boolean and array to use the same pretty-print logic.
               if (dataType === 'boolean' || dataType === 'array') {
                 return JSON.stringify(value)
               }
+
               if (dataType === 'date') {
                 return formatDate(value as any) // Assumes formatDate utility
               }
-              return value
+
+              // Ensure non-string values are converted to string to prevent render errors.
+              if (value !== null && typeof value !== 'undefined') {
+                return String(value)
+              }
+
+              return null // Render nothing if value is null or undefined
             },
           }
         }) || []

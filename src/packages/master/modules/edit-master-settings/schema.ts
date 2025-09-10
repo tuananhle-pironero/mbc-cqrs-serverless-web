@@ -82,7 +82,20 @@ export const mapEntity2Form = (settings: SettingDataEntity) => {
   ) {
     settings.attributes.fields.unshift(...defaultSettingFields)
   }
-  const fieldListData: SettingAttrFields[] = settings.attributes.fields
+  const fieldListData: SettingAttrFields[] = settings.attributes.fields.map(
+    (item) => {
+      if (item.dataType === 'json') {
+        return {
+          ...item,
+          uiComponent: 'string',
+          defaultValue: item.defaultValue
+            ? JSON.stringify(item.defaultValue)
+            : item.defaultValue,
+        }
+      }
+      return item
+    }
+  )
 
   return { formData, fieldListData }
 }
