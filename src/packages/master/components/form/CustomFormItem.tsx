@@ -19,7 +19,7 @@ export default function CustomFormItem({
   return (
     <FormItem className={cn('flex w-full flex-col gap-2', className)}>
       <FormLabel className="font-semibold">
-        <span>{label}</span>
+        <span className="text-[hsl(var(--foreground))]">{label}</span>
         {required && <span className="ml-1 text-destructive">*</span>}
       </FormLabel>
       <div className="relative flex-col">
