@@ -354,7 +354,9 @@ export default function AddFieldsForm({
       <DialogContent className="max-h-[85%] w-[90%] max-w-none overflow-y-auto lg:w-[80%] xl:w-[60%]">
         <DialogHeader>
           <DialogTitle>
-            <div className="mt-1 text-center">項目追加</div>
+            <div className="mt-1 text-center text-[hsl(var(--foreground))]">
+              項目追加
+            </div>
           </DialogTitle>
         </DialogHeader>
 
@@ -374,7 +376,7 @@ export default function AddFieldsForm({
                       <FormControl>
                         <Input
                           autoComplete="physicalName"
-                          className="focus-visible:ring-offset-0"
+                          className="text-[hsl(var(--foreground))] focus-visible:ring-offset-0"
                           disabled={isDefaultSettingField}
                           {...field}
                         />
@@ -394,7 +396,7 @@ export default function AddFieldsForm({
                       <FormControl>
                         <Input
                           autoComplete="name"
-                          className="focus-visible:ring-offset-0"
+                          className="text-[hsl(var(--foreground))] focus-visible:ring-offset-0"
                           {...field}
                         />
                       </FormControl>
@@ -521,7 +523,7 @@ export default function AddFieldsForm({
                             <Input
                               type="number"
                               autoComplete="min"
-                              className="focus-visible:ring-offset-0"
+                              className="text-[hsl(var(--foreground))] focus-visible:ring-offset-0"
                               {...field}
                             />
                           </FormControl>
@@ -537,7 +539,7 @@ export default function AddFieldsForm({
                             <Input
                               type="number"
                               autoComplete="max"
-                              className="focus-visible:ring-offset-0"
+                              className="text-[hsl(var(--foreground))] focus-visible:ring-offset-0"
                               {...field}
                             />
                           </FormControl>
@@ -556,7 +558,7 @@ export default function AddFieldsForm({
                           <Input
                             type="number"
                             autoComplete="length"
-                            className="focus-visible:ring-offset-0"
+                            className="text-[hsl(var(--foreground))] focus-visible:ring-offset-0"
                             {...field}
                           />
                         </FormControl>
@@ -618,7 +620,7 @@ export default function AddFieldsForm({
                           <FormControl>
                             <Input
                               autoComplete="postfix"
-                              className="focus-visible:ring-offset-0"
+                              className="text-[hsl(var(--foreground))] focus-visible:ring-offset-0"
                               {...field}
                             />
                           </FormControl>
@@ -789,7 +791,7 @@ export default function AddFieldsForm({
                           <FormControl>
                             <Input
                               autoComplete="defaultValue"
-                              className="focus-visible:ring-offset-0"
+                              className="text-[hsl(var(--foreground))] focus-visible:ring-offset-0"
                               {...field}
                               value={
                                 typeof field.value === 'boolean'
@@ -848,7 +850,7 @@ export default function AddFieldsForm({
                       <FormControl>
                         <Textarea
                           autoComplete="description"
-                          className="focus-visible:ring-offset-0"
+                          className="text-[hsl(var(--foreground))] focus-visible:ring-offset-0"
                           {...field}
                         />
                       </FormControl>
