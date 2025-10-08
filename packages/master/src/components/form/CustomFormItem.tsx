@@ -1,0 +1,31 @@
+'use client'
+
+import * as React from 'react'
+
+import { FormItem, FormLabel, FormMessage } from '../ui/form'
+import { cn } from '../../lib/utils'
+
+export default function CustomFormItem({
+  className,
+  label,
+  required,
+  children,
+}: {
+  className?: string
+  label: string
+  children: React.ReactNode
+  required?: boolean
+}) {
+  return (
+    <FormItem className={cn('flex w-full flex-col gap-2', className)}>
+      <FormLabel className="font-semibold">
+        <span className="text-[hsl(var(--foreground))]">{label}</span>
+        {required && <span className="text-destructive ml-1">*</span>}
+      </FormLabel>
+      <div className="relative flex-col">
+        {children}
+        <FormMessage className="mt-2 text-xs font-semibold" />
+      </div>
+    </FormItem>
+  )
+}
