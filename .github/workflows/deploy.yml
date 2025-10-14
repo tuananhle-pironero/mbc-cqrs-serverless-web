@@ -1,4 +1,4 @@
-name: Deploy to NPM
+name: Deploy Monorepo Packages to NPM
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest # Use the latest Ubuntu runner
+    runs-on: ubuntu-latest
 
     steps:
       # Step 1: Check out the repository's code
@@ -21,16 +21,18 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x' # Specify the Node.js version to use
-          registry-url: 'https://registry.npmjs.org' # Set the registry to npm
+          node-version: '20.x'
+          registry-url: 'https://registry.npmjs.org'
 
-      # Step 3: Install project dependencies
-      - name: Install dependencies
-        run: npm ci # Use 'ci' for faster, more reliable installs in CI environments
+      # Step 3: Install dependencies and bootstrap Lerna
+      - name: Install dependencies and bootstrap
+        run: |
+          npm ci
+          npx lerna bootstrap
 
-      # Step 4: Build the package for distribution
-      - name: Build package
-        run: npm run build # Runs the 'build' script from your package.json
+      # Step 4: Build all packages
+      - name: Build packages
+        run: npx lerna run build
 
       # Step 5: Configure Git for versioning
       - name: Configure Git
@@ -38,20 +40,16 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-      # Step 6: Bump version, create tag, and publish to npm
-      - name: Bump version and publish
+      # Step 6: Version and publish packages using Lerna
+      - name: Version and publish packages
         run: |
-          # Increment the patch version number, create a commit, and tag it.
-          # The '%s' in the commit message is a placeholder for the new version number.
-          npm version patch -m "chore(release): %s"
-          
-          # Publish the package to the npm registry
-
-          npm publish --access public
+          # Use Lerna to version and publish packages
+          npx lerna version patch --yes --no-push
+          npx lerna publish from-package --yes
         env:
           # Use the NPM_TOKEN secret to authenticate with the npm registry
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      # Step 7: Push the new commit and tag back to the GitHub repository
+      # Step 7: Push the new commits and tags back to the GitHub repository
       - name: Push changes
         run: git push --follow-tags
