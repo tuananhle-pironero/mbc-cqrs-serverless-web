@@ -24,11 +24,9 @@ jobs:
           node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
 
-      # Step 3: Install dependencies and bootstrap Lerna
-      - name: Install dependencies and bootstrap
-        run: |
-          npm ci
-          npx lerna bootstrap
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm ci
 
       # Step 4: Build all packages
       - name: Build packages
