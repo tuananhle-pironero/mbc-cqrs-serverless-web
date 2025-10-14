@@ -42,7 +42,7 @@ jobs:
       - name: Version and publish packages
         run: |
           # Use Lerna to version and publish packages
-          npx lerna version patch --yes --no-push
+          npx lerna version patch --yes --no-push --conventional-commits
           npx lerna publish from-package --yes
         env:
           # Use the NPM_TOKEN secret to authenticate with the npm registry
