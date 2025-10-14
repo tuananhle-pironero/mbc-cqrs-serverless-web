@@ -8,6 +8,8 @@
   "files": [
     "dist"
   ],
+  "author": "Murakami Business Consulting, Inc.",
+  "license": "MIT",
   "exports": {
     "./styles": {
       "types": "./dist/styles.d.ts",
