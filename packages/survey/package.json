@@ -1,0 +1,30 @@
+{
+  "name": "@mbc-cqrs-serverless/survey",
+  "version": "0.0.16",
+  "description": "Now I’m the model of a modern major general / The venerated Virginian veteran whose men are all / Lining up, to put me up on a pedestal / Writin’ letters to relatives / Embellishin’ my elegance and eloquence / But the elephant is in the room / The truth is in ya face when ya hear the British cannons go / BOOM",
+  "keywords": [],
+  "author": "Quan Nguyen Ba <quan.nguyenba@pionero.io>",
+  "license": "ISC",
+  "main": "src/survey.js",
+  "directories": {
+    "src": "src",
+    "test": "__tests__"
+  },
+  "files": [
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mbc-net/mbc-cqrs-serverless-web.git"
+  },
+  "scripts": {
+    "test": "node ./__tests__/survey.test.js"
+  },
+  "bugs": {
+    "url": "https://github.com/mbc-net/mbc-cqrs-serverless-web/issues"
+  },
+  "homepage": "https://github.com/mbc-net/mbc-cqrs-serverless-web#readme"
+}
