@@ -27,5 +27,8 @@
   },
   "dependencies": {
     "@swc/helpers": "^0.5.17"
+  },
+  "overrides": {
+    "picomatch": "^4.0.3"
   }
 }
