@@ -1,55 +1,43 @@
 {
-  "name": "@mbc-cqrs-serverless-web/master",
+  "name": "@mbc-cqrs-serverless-web/survey",
   "version": "0.0.1",
   "private": false,
+  "description": "Survey components library for MBC CQRS Serverless Web",
+  "keywords": [
+    "survey",
+    "forms",
+    "react",
+    "nextjs",
+    "typescript"
+  ],
+  "author": "Murakami Business Consulting, Inc.",
+  "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
-  "author": "Murakami Business Consulting, Inc.",
-  "license": "MIT",
   "exports": {
     "./styles": {
       "types": "./dist/styles.d.ts",
       "import": "./dist/styles.mjs",
       "require": "./dist/styles.js"
     },
-    "./MasterSetting": {
-      "types": "./dist/MasterSetting.d.ts",
-      "import": "./dist/MasterSetting.mjs",
-      "require": "./dist/MasterSetting.js"
+    "./SurveyTemplatePage": {
+      "types": "./dist/SurveyTemplatePage.d.ts",
+      "import": "./dist/SurveyTemplatePage.mjs",
+      "require": "./dist/SurveyTemplatePage.js"
     },
-    "./MasterData": {
-      "types": "./dist/MasterData.d.ts",
-      "import": "./dist/MasterData.mjs",
-      "require": "./dist/MasterData.js"
+    "./EditSurveyTemplatePage": {
+      "types": "./dist/EditSurveyTemplatePage.d.ts",
+      "import": "./dist/EditSurveyTemplatePage.mjs",
+      "require": "./dist/EditSurveyTemplatePage.js"
     },
-    "./EditMasterSettings": {
-      "types": "./dist/EditMasterSettings.d.ts",
-      "import": "./dist/EditMasterSettings.mjs",
-      "require": "./dist/EditMasterSettings.js"
-    },
-    "./EditMasterData": {
-      "types": "./dist/EditMasterData.d.ts",
-      "import": "./dist/EditMasterData.mjs",
-      "require": "./dist/EditMasterData.js"
-    },
-    "./AppProviders": {
-      "types": "./dist/AppProviders.d.ts",
-      "import": "./dist/AppProviders.mjs",
-      "require": "./dist/AppProviders.js"
-    },
-    "./UrlProvider": {
-      "types": "./dist/UrlProvider.d.ts",
-      "import": "./dist/UrlProvider.mjs",
-      "require": "./dist/UrlProvider.js"
-    },
-    "./MsLayout": {
-      "types": "./dist/MsLayout.d.ts",
-      "import": "./dist/MsLayout.mjs",
-      "require": "./dist/MsLayout.js"
+    "./SurveyForm": {
+      "types": "./dist/SurveyForm.d.ts",
+      "import": "./dist/SurveyForm.mjs",
+      "require": "./dist/SurveyForm.js"
     },
     "./styles.css": "./dist/styles.css"
   },
@@ -59,7 +47,8 @@
     "build:watch": "tsup --watch",
     "dev": "tsup --watch",
     "lint": "tsc --noEmit",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "test": "node ./__tests__/survey.test.js"
   },
   "dependencies": {
     "@apollo/client": "^3.13.1",
@@ -69,45 +58,40 @@
     "@hookform/resolvers": "^3.3.4",
     "@radix-ui/react-accordion": "^1.2.3",
     "@radix-ui/react-alert-dialog": "^1.0.5",
+    "@radix-ui/react-avatar": "^1.1.10",
     "@radix-ui/react-checkbox": "^1.3.2",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-popover": "^1.0.7",
     "@radix-ui/react-radio-group": "^1.3.7",
+    "@radix-ui/react-scroll-area": "^1.2.9",
     "@radix-ui/react-select": "^2.0.0",
+    "@radix-ui/react-separator": "^1.1.6",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-switch": "^1.0.3",
+    "@radix-ui/react-tabs": "^1.1.12",
     "@radix-ui/react-toast": "^1.1.5",
+    "@radix-ui/react-tooltip": "^1.2.7",
     "@tanstack/react-table": "^8.21.3",
-    "@uiw/react-md-editor": "^3.6.0",
-    "aws-amplify": "^5.0.5",
+    "aws-amplify": "^6.15.4",
     "aws-appsync-auth-link": "^3.0.7",
     "aws-appsync-subscription-link": "^3.1.3",
     "axios": "^1.6.8",
-    "class-variance-authority": "^0.7.0",
-    "clsx": "^2.1.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "date-fns": "^4.1.0",
-    "jsoneditor": "^10.0.2",
-    "lucide-react": "^0.372.0",
-    "mobx-react-lite": "^3.4.0",
+    "lucide-react": "^0.525.0",
     "next": "^14.0.0",
-    "next-usequerystate": "^1.20.0",
-    "nuqs": "^1.17.1",
-    "patch-package": "^8.0.0",
+    "next-themes": "^0.4.6",
     "react": "^18.0.0",
     "react-day-picker": "^9.8.0",
     "react-dom": "^18.0.0",
-    "react-draggable": "^4.5.0",
     "react-hook-form": "^7.51.3",
-    "react-quill-new": "^3.4.6",
-    "react-resizable": "^3.0.5",
-    "retry-axios": "^3.1.3",
-    "swr": "^2.2.5",
-    "tailwind-merge": "^2.3.0",
+    "sonner": "^2.0.6",
+    "tailwind-merge": "^3.2.0",
     "tailwindcss-animate": "^1.0.7",
-    "usehooks-ts": "^3.1.0",
     "zod": "^3.23.0"
   },
   "devDependencies": {
@@ -116,6 +100,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.16",
+    "glob": "^10.3.10",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "tsup": "^8.0.2",
@@ -125,5 +110,16 @@
     "next": "^14.0.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
-  }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mbc-net/mbc-cqrs-serverless-web.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mbc-net/mbc-cqrs-serverless-web/issues"
+  },
+  "homepage": "https://github.com/mbc-net/mbc-cqrs-serverless-web#readme"
 }
