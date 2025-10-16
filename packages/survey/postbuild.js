@@ -7,7 +7,9 @@ const glob = require('glob')
 const distDir = path.join(__dirname, 'dist')
 
 // Find all JavaScript files in the dist directory
-const files = glob.sync(`${distDir}/**/*.js`)
+const jsFiles = glob.sync(`${distDir}/**/*.js`)
+const mjsFiles = glob.sync(`${distDir}/**/*.mjs`)
+const files = [...jsFiles, ...mjsFiles]
 
 files.forEach((file) => {
   fs.readFile(file, 'utf8', (err, data) => {
