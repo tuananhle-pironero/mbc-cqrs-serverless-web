@@ -52,7 +52,8 @@ export const SurveyCard = memo<SurveyCardProps>(({ survey, onClick }) => {
             {survey.name}
           </CardTitle>
           <CardDescription className="line-clamp-2 text-sm sm:text-base">
-            {attributes?.description || 'No description provided'}
+            {/* No description provided */}
+            {attributes?.description || '説明が提供されていません'}
           </CardDescription>
         </div>
       </CardHeader>

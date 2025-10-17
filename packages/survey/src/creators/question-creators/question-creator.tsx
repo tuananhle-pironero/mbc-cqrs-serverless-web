@@ -211,7 +211,7 @@ export const QuestionCreator: React.FC<QuestionCreatorProps> = ({
 
           <div className="flex items-center gap-4">
             <Input
-              placeholder="Question"
+              placeholder="質問" // "Question"
               className="h-12 flex-grow rounded-none border-0 border-b px-1 text-lg font-semibold shadow-none focus-visible:ring-0"
               {...register(`${itemPath}.label`)}
             />

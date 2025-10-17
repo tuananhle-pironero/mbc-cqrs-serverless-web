@@ -172,7 +172,7 @@ export const OptionsCreator: React.FC<OptionsCreatorProps> = ({
   }
 
   const addOption = () => {
-    const newLabel = `Option ${optionFields.length + 1}`
+    const newLabel = `オプション ${optionFields.length + 1}` // "Option ${optionFields.length + 1}"
     const newValue = newLabel.toLowerCase().replace(/\s+/g, '-')
     appendOption({ label: newLabel, value: newValue })
   }

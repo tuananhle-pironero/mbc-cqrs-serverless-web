@@ -131,7 +131,7 @@ const TimeValidationSchema = BaseValidationRulesSchema
 
 const BaseQuestionSchema = z.object({
   id: z.string().min(1, "Question 'id' cannot be empty."),
-  label: z.string().min(1, "Question 'label' cannot be empty."),
+  label: z.string(),
   description: z.string().optional(),
   validation: BaseValidationRulesSchema.optional(),
 })

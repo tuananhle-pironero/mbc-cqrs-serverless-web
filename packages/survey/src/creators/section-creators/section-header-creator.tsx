@@ -200,8 +200,8 @@ export const SectionHeaderCreator: React.FC<SectionHeaderCreatorProps> = ({
     <div id={itemId} className="relative pt-5">
       {/* Section Number Tab */}
       <div className="bg-primary text-primary-foreground absolute -top-1 left-0 z-10 rounded-md rounded-b-none px-3 py-1 text-xs font-semibold">
-        {/* Section */}
-        {currentSectionNumber} セクション / {totalSections} セクション
+        {/* Section {currentSectionNumber} of {totalSections} */}
+        セクション {currentSectionNumber} / {totalSections}
       </div>
 
       {/* Main Content Card */}
