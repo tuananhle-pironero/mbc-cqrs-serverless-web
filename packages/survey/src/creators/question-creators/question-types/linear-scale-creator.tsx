@@ -54,7 +54,7 @@ export const LinearScaleCreator: React.FC<LinearScaleCreatorProps> = ({
               </Select>
             )}
           />
-          <span className="text-muted-foreground text-sm">to</span>
+          <span className="text-muted-foreground text-sm">〜</span> {/* to */}
           <Controller
             control={control}
             name={`${itemPath}.max`}

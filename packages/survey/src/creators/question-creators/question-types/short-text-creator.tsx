@@ -77,21 +77,25 @@ const ShortTextValidationBuilder: React.FC<{
                 <SelectTrigger className="w-[120px] border-0" size="xs">
                   <SelectValue
                     className="text-xs placeholder:text-xs"
-                    placeholder="Type..."
+                    placeholder="タイプ..." // "Type..."
                   />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem className="text-xs" value="number">
-                    Number
+                    {/* Number */}
+                    数値
                   </SelectItem>
                   <SelectItem className="text-xs" value="text">
-                    Text
+                    {/* Text */}
+                    テキスト
                   </SelectItem>
                   <SelectItem className="text-xs" value="length">
-                    Length
+                    {/* Length */}
+                    文字数
                   </SelectItem>
                   <SelectItem className="text-xs" value="regex">
-                    Regex
+                    {/* Regex */}
+                    正規表現
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -109,56 +113,70 @@ const ShortTextValidationBuilder: React.FC<{
                 <SelectTrigger className="w-[180px] border-0" size="xs">
                   <SelectValue
                     className="text-xs placeholder:text-xs"
-                    placeholder="Rule..."
+                    placeholder="ルール..." // "Rule..."
                   />
                 </SelectTrigger>
                 <SelectContent>
                   {validationRule?.type === 'number' && (
                     <>
                       <SelectItem className="text-xs" value="gt">
-                        Greater than
+                        {/* Greater than */}
+                        より大きい
                       </SelectItem>
                       <SelectItem className="text-xs" value="gte">
-                        Greater than or equal to
+                        {/* Greater than or equal to */}
+                        以上
                       </SelectItem>
                       <SelectItem className="text-xs" value="lt">
-                        Less than
+                        {/* Less than */}
+                        より小さい
                       </SelectItem>
                       <SelectItem className="text-xs" value="lte">
-                        Less than or equal to
+                        {/* Less than or equal to */}
+                        以下
                       </SelectItem>
                       <SelectItem className="text-xs" value="eq">
-                        Equal to
+                        {/* Equal to */}
+                        等しい
                       </SelectItem>
                       <SelectItem className="text-xs" value="neq">
-                        Not equal to
+                        {/* Not equal to */}
+                        等しくない
                       </SelectItem>
                       <SelectItem className="text-xs" value="between">
-                        Between
+                        {/* Between */}
+                        範囲内
                       </SelectItem>
                       <SelectItem className="text-xs" value="not_between">
-                        Not between
+                        {/* Not between */}
+                        範囲外
                       </SelectItem>
                       <SelectItem className="text-xs" value="is_number">
-                        Is number
+                        {/* Is number */}
+                        数値
                       </SelectItem>
                       <SelectItem className="text-xs" value="is_whole">
-                        Whole number
+                        {/* Whole number */}
+                        整数
                       </SelectItem>
                     </>
                   )}
                   {validationRule?.type === 'text' && (
                     <>
                       <SelectItem className="text-xs" value="contains">
-                        Contains
+                        {/* Contains */}
+                        含む
                       </SelectItem>
                       <SelectItem className="text-xs" value="not_contains">
-                        Doesn't contain
+                        {/* Doesn't contain */}
+                        含まない
                       </SelectItem>
                       <SelectItem className="text-xs" value="is_email">
-                        Email address
+                        {/* Email address */}
+                        メールアドレス
                       </SelectItem>
                       <SelectItem className="text-xs" value="is_url">
+                        {/* URL */}
                         URL
                       </SelectItem>
                     </>
@@ -201,7 +219,7 @@ const ShortTextValidationBuilder: React.FC<{
                   ? 'number'
                   : 'text'
               }
-              placeholder="Value"
+              placeholder="Value" // "Value"
               className="min-w-[80px] flex-grow rounded-none border-0 border-b px-1 text-xs shadow-none placeholder:text-xs focus-visible:ring-0"
               {...register(`${validationPath}.value`)}
             />
@@ -219,7 +237,7 @@ const ShortTextValidationBuilder: React.FC<{
         {/* --- Group 3: Custom Error and Close Button --- */}
         <div className="flex w-full flex-grow gap-2 sm:w-auto">
           <Input
-            placeholder="Custom error text"
+            placeholder="カスタムエラーテキスト" // "Custom error text"
             className="flex-grow rounded-none border-0 border-b px-1 text-xs shadow-none placeholder:text-xs focus-visible:ring-0"
             {...register(`${validationPath}.customError`)}
           />
@@ -247,7 +265,8 @@ export const ShortTextCreator: React.FC<ShortTextCreatorProps> = ({
     <>
       <div className="px-1 pt-4">
         <p className="text-muted-foreground pointer-events-none w-1/2 border-b border-dashed text-sm">
-          Short answer text
+          {/* Short answer text */}
+          短文回答
         </p>
       </div>
 
@@ -264,7 +283,8 @@ export const ShortTextCreator: React.FC<ShortTextCreatorProps> = ({
 export const ShortTextPreview: React.FC = () => {
   return (
     <p className="text-muted-foreground pointer-events-none w-1/2 border-b border-dashed text-sm">
-      Short answer text
+      {/* Short answer text */}
+      短文回答
     </p>
   )
 }

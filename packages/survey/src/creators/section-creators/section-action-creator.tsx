@@ -34,7 +34,7 @@ export const SectionActionCreator: React.FC<SectionActionCreatorProps> = ({
     <div className="mt-6 pb-6">
       <div className="flex items-center gap-2">
         <p className="text-muted-foreground flex-shrink-0 text-sm font-medium">
-          After section {sectionNumber}
+          {sectionNumber} セクション後 {/* After section */}
         </p>
 
         <Controller
@@ -68,11 +68,12 @@ export const SectionActionCreator: React.FC<SectionActionCreatorProps> = ({
                 }}
               >
                 <SelectTrigger className="w-auto border-0 bg-transparent p-1 shadow-none focus:ring-0 focus:ring-offset-0">
-                  <SelectValue placeholder="Continue to next section" />
+                  <SelectValue placeholder="次のセクションに進む" />{' '}
+                  {/* Continue to next section */}
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="default">
-                    Continue to next section
+                    次のセクションに進む {/* Continue to next section */}
                   </SelectItem>
 
                   {sectionHeaders
@@ -82,13 +83,18 @@ export const SectionActionCreator: React.FC<SectionActionCreatorProps> = ({
                         sectionHeaders.findIndex((sec) => sec.id === s.id) + 1
                       return (
                         <SelectItem key={s.id} value={s.id}>
-                          Go to section {visualIndex} (
-                          {s.title || 'Untitled Section'})
+                          {/* Go to section */}
+                          {/* Untitled Section */}
+                          {visualIndex} セクションに移動 (
+                          {s.title || '未タイトルセクション'})
                         </SelectItem>
                       )
                     })}
 
-                  <SelectItem value="##SUBMIT##">Submit form</SelectItem>
+                  <SelectItem value="##SUBMIT##">
+                    {/* Submit form */}
+                    フォームを送信
+                  </SelectItem>
                 </SelectContent>
               </Select>
             )

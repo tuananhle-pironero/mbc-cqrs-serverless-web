@@ -51,7 +51,7 @@ export const TimeQuestionComponent: React.FC<{
       rules={{
         validate: (value) => {
           if (!question.validation?.required) return true
-          if (!value) return 'This field is required'
+          if (!value) return 'この項目は必須です' // This field is required
 
           if (question.answerType === 'duration') {
             return (value.hours || value.minutes || value.seconds) &&
@@ -59,12 +59,12 @@ export const TimeQuestionComponent: React.FC<{
               !Number.isNaN(Number.parseInt(value.minutes, 10)) &&
               !Number.isNaN(Number.parseInt(value.seconds, 10))
               ? true
-              : 'This field is required'
+              : 'この項目は必須です' // This field is required
           }
           // 'time' answer type
           return value.hour && value.minute && value.period
             ? true
-            : 'This field is required'
+            : 'この項目は必須です' // This field is required
         },
       }}
       render={({ field }) => (

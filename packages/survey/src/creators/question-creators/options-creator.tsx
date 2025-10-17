@@ -77,7 +77,7 @@ const SortableOption: React.FC<{
       </div>
       <div className="flex-1">
         <Input
-          placeholder={`Option ${index + 1}`}
+          placeholder={`オプション ${index + 1}`} // "Option ${index + 1}"
           {...register(`items.${itemIndex}.options.${index}.label`)}
         />
       </div>
@@ -98,15 +98,18 @@ const SortableOption: React.FC<{
                   }}
                 >
                   <SelectTrigger className="text-xs">
-                    <SelectValue placeholder="Go to section..." />
+                    <SelectValue placeholder="セクションに移動..." />{' '}
+                    {/* Go to section... */}
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value={DEFAULT_SELECT_VALUE}>
-                      Default (Next Section)
+                      {/* Default (Next Section) */}
+                      デフォルト (次のセクション)
                     </SelectItem>
                     {sectionHeaders.map((sec) => (
                       <SelectItem key={sec.id} value={sec.id}>
-                        {sec.title || 'Untitled Section'}
+                        {/* Untitled Section */}
+                        {sec.title || '未タイトルセクション'}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -176,7 +179,7 @@ export const OptionsCreator: React.FC<OptionsCreatorProps> = ({
 
   return (
     <div className="space-y-3 pt-2">
-      <Label>Options</Label>
+      <Label>オプション</Label> {/* Options */}
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
@@ -203,7 +206,8 @@ export const OptionsCreator: React.FC<OptionsCreatorProps> = ({
         </SortableContext>
       </DndContext>
       <Button type="button" variant="outline" size="sm" onClick={addOption}>
-        Add Option
+        {/* Add Option */}
+        オプションを追加
       </Button>
     </div>
   )

@@ -99,7 +99,7 @@ export const QuestionCreator: React.FC<QuestionCreatorProps> = ({
   const itemPath = `items.${itemIndex}`
   const questionData = watch(itemPath) as SurveyQuestionItemType
 
-  const questionLabel = questionData?.label || 'New Question'
+  const questionLabel = questionData?.label || '新しい質問' // 'New Question'
   const questionType = questionData?.type
   const showOptions = ['single-choice', 'multiple-choice', 'dropdown'].includes(
     questionType
@@ -241,12 +241,14 @@ export const QuestionCreator: React.FC<QuestionCreatorProps> = ({
                     <SelectGroup>
                       <SelectItem value="short-text">
                         <div className="flex items-center gap-2">
-                          <Minus className="h-4 w-4" /> Short answer
+                          {/* Short answer */}
+                          <Minus className="h-4 w-4" /> 短文回答
                         </div>
                       </SelectItem>
                       <SelectItem value="long-text">
                         <div className="flex items-center gap-2">
-                          <AlignLeft className="h-4 w-4" /> Paragraph
+                          {/* Paragraph */}
+                          <AlignLeft className="h-4 w-4" /> 段落
                         </div>
                       </SelectItem>
                     </SelectGroup>
@@ -254,17 +256,21 @@ export const QuestionCreator: React.FC<QuestionCreatorProps> = ({
                     <SelectGroup>
                       <SelectItem value="single-choice">
                         <div className="flex items-center gap-2">
-                          <CircleDot className="h-4 w-4" /> Multiple choice
+                          {/* Multiple choice */}
+                          <CircleDot className="h-4 w-4" /> 複数選択
                         </div>
                       </SelectItem>
                       <SelectItem value="multiple-choice">
                         <div className="flex items-center gap-2">
-                          <CheckSquare className="h-4 w-4" /> Checkboxes
+                          {/* Checkboxes */}
+                          <CheckSquare className="h-4 w-4" /> チェックボックス
                         </div>
                       </SelectItem>
                       <SelectItem value="dropdown">
                         <div className="flex items-center gap-2">
-                          <ChevronDownSquare className="h-4 w-4" /> Dropdown
+                          {/* Dropdown */}
+                          <ChevronDownSquare className="h-4 w-4" />{' '}
+                          ドロップダウン
                         </div>
                       </SelectItem>
                     </SelectGroup>
@@ -272,14 +278,16 @@ export const QuestionCreator: React.FC<QuestionCreatorProps> = ({
                     <SelectGroup>
                       <SelectItem value="linear-scale">
                         <div className="flex items-center gap-2">
-                          <BarChartHorizontal className="h-4 w-4" /> Linear
-                          scale
+                          {/* Linear scale */}
+                          <BarChartHorizontal className="h-4 w-4" />{' '}
+                          線形スケール
                         </div>
                       </SelectItem>
                       <SelectItem value="rating">
                         <div className="flex w-full items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <Star className="h-4 w-4" /> Rating
+                            {/* Rating */}
+                            <Star className="h-4 w-4" /> 評価
                           </div>
                         </div>
                       </SelectItem>
@@ -288,12 +296,14 @@ export const QuestionCreator: React.FC<QuestionCreatorProps> = ({
                     <SelectGroup>
                       <SelectItem value="date">
                         <div className="flex items-center gap-2">
-                          <Calendar className="h-4 w-4" /> Date
+                          {/* Date */}
+                          <Calendar className="h-4 w-4" /> 日付
                         </div>
                       </SelectItem>
                       <SelectItem value="time">
                         <div className="flex items-center gap-2">
-                          <Clock className="h-4 w-4" /> Time
+                          {/* Time */}
+                          <Clock className="h-4 w-4" /> 時間
                         </div>
                       </SelectItem>
                     </SelectGroup>
@@ -306,7 +316,7 @@ export const QuestionCreator: React.FC<QuestionCreatorProps> = ({
           <div className="mt-4 space-y-2">
             {showDescription && (
               <Input
-                placeholder="Description"
+                placeholder="説明" // "Description"
                 className="rounded-none border-0 px-1 text-sm shadow-none focus-visible:ring-0"
                 {...register(`${itemPath}.description`)}
               />
@@ -384,7 +394,7 @@ export const QuestionCreator: React.FC<QuestionCreatorProps> = ({
               variant="ghost"
               size="icon"
               onClick={handleDuplicate}
-              title="Duplicate"
+              title="複製" // "Duplicate"
             >
               <Copy className="h-4 w-4" />
             </Button>
@@ -394,7 +404,7 @@ export const QuestionCreator: React.FC<QuestionCreatorProps> = ({
               size="icon"
               className="hover:bg-destructive/10 hover:text-destructive"
               onClick={() => removeItem(itemIndex)}
-              title="Delete"
+              title="削除" // "Delete"
             >
               <Trash2 className="h-4 w-4" />
             </Button>
@@ -406,7 +416,8 @@ export const QuestionCreator: React.FC<QuestionCreatorProps> = ({
                 htmlFor={`${itemPath}.validation.required`}
                 className="cursor-pointer text-sm font-medium"
               >
-                Required
+                {/* Required */}
+                必須
               </Label>
               <Controller
                 control={control}
@@ -427,7 +438,8 @@ export const QuestionCreator: React.FC<QuestionCreatorProps> = ({
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Show</DropdownMenuLabel>
+                {/* Show */}
+                <DropdownMenuLabel>表示</DropdownMenuLabel>
                 <DropdownMenuCheckboxItem
                   checked={showDescription}
                   onCheckedChange={(checked) => {
@@ -437,7 +449,8 @@ export const QuestionCreator: React.FC<QuestionCreatorProps> = ({
                     }
                   }}
                 >
-                  Description
+                  {/* Description */}
+                  説明
                 </DropdownMenuCheckboxItem>
                 {(questionType === 'short-text' ||
                   questionType === 'long-text' ||
@@ -469,7 +482,8 @@ export const QuestionCreator: React.FC<QuestionCreatorProps> = ({
                       }
                     }}
                   >
-                    Response validation
+                    {/* Response validation */}
+                    回答の検証
                   </DropdownMenuCheckboxItem>
                 )}
                 {(questionType === 'single-choice' ||
@@ -486,13 +500,15 @@ export const QuestionCreator: React.FC<QuestionCreatorProps> = ({
                         )
                       }}
                     >
-                      Shuffle option order
+                      {/* Shuffle option order */}
+                      オプションをシャッフル
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem
                       checked={!!showBranching}
                       onCheckedChange={setShowBranching}
                     >
-                      Go to section based on answer
+                      {/* Go to section based on answer */}
+                      回答に基づいてセクションに移動
                     </DropdownMenuCheckboxItem>
                   </>
                 )}
@@ -509,7 +525,8 @@ export const QuestionCreator: React.FC<QuestionCreatorProps> = ({
                         )
                       }}
                     >
-                      Shuffle option order
+                      {/* Shuffle option order */}
+                      オプションをシャッフル
                     </DropdownMenuCheckboxItem>
                   </>
                 )}
@@ -521,7 +538,8 @@ export const QuestionCreator: React.FC<QuestionCreatorProps> = ({
                         setValue(`${itemPath}.includeTime`, !!checked)
                       }}
                     >
-                      Include time
+                      {/* Include time */}
+                      時間を含む
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem
                       checked={
@@ -531,14 +549,16 @@ export const QuestionCreator: React.FC<QuestionCreatorProps> = ({
                         setValue(`${itemPath}.includeYear`, !!checked)
                       }}
                     >
-                      Include year
+                      {/* Include year */}
+                      年を含む
                     </DropdownMenuCheckboxItem>
                   </>
                 )}
                 {questionType === 'time' && (
                   <>
                     <DropdownMenuSeparator />
-                    <DropdownMenuLabel>Answer type</DropdownMenuLabel>
+                    <DropdownMenuLabel>回答の種類</DropdownMenuLabel>{' '}
+                    {/* Answer type */}
                     <DropdownMenuRadioGroup
                       value={
                         (questionData as TimeQuestionType).answerType || 'time'
@@ -548,10 +568,12 @@ export const QuestionCreator: React.FC<QuestionCreatorProps> = ({
                       }}
                     >
                       <DropdownMenuRadioItem value="time">
-                        Time
+                        {/* Time */}
+                        時間
                       </DropdownMenuRadioItem>
                       <DropdownMenuRadioItem value="duration">
-                        Duration
+                        {/* Duration */}
+                        期間
                       </DropdownMenuRadioItem>
                     </DropdownMenuRadioGroup>
                   </>
@@ -574,7 +596,7 @@ export const QuestionCreator: React.FC<QuestionCreatorProps> = ({
           </div>
           <div className="space-y-2">
             <p className="font-semibold">
-              {questionLabel || 'Untitled Question'}
+              {questionLabel || '未タイトルの質問'} {/* Untitled Question */}
             </p>
             {questionData.description && (
               <p className="text-muted-foreground text-sm">

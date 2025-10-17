@@ -15,12 +15,18 @@ export function EditSurveyTemplateLoadingState({
         <Spinner size="lg" />
         <div className="text-center">
           <h3 className="text-foreground text-lg font-semibold">
-            {id ? 'Loading survey...' : 'Preparing survey creator...'}
+            {id
+              ? // Loading survey...
+                'アンケートを読み込んでいます...'
+              : // Preparing survey creator...
+                'アンケート作成インターフェースを準備しています...'}
           </h3>
           <p className="text-muted-foreground text-sm">
             {id
-              ? 'Please wait while we load your survey data'
-              : 'Setting up the survey creation interface'}
+              ? // Please wait while we load your survey data
+                'アンケートデータを読み込んでいます。しばらくお待ちください。'
+              : // Setting up the survey creation interface
+                'アンケート作成インターフェースを準備しています。しばらくお待ちください。'}
           </p>
         </div>
       </div>

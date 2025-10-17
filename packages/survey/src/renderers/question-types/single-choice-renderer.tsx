@@ -20,7 +20,7 @@ export const SingleChoiceQuestionComponent: React.FC<{
       control={control}
       rules={{
         required: question.validation?.required
-          ? 'Please select an option'
+          ? 'オプションを選択してください' // Please select an option
           : false,
       }}
       render={({ field }) => (

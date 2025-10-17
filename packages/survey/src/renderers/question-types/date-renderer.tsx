@@ -23,7 +23,7 @@ export const DateQuestionComponent: React.FC<{
       control={control}
       rules={{
         required: question.validation?.required
-          ? 'This field is required'
+          ? 'This field is required' // This field is required
           : false,
       }}
       render={({ field }) => (

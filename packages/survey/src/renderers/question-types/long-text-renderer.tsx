@@ -20,7 +20,7 @@ export const LongTextQuestionComponent: React.FC<{
       control={control}
       rules={{
         required: question.validation?.required
-          ? 'This field is required'
+          ? 'この項目は必須です' // This field is required
           : false,
         validate: (inputValue: string) => {
           const rule = question.validation?.custom

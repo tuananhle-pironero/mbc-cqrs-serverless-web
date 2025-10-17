@@ -69,7 +69,9 @@ export const SectionCreator: React.FC<SectionCreatorProps> = ({
           <div className="cursor-grab" {...dndAttributes} {...dndListeners}>
             <GripVertical className="text-muted-foreground h-5 w-5" />
           </div>
-          <CardTitle className="ml-2">{itemData?.title || 'Section'}</CardTitle>
+          <CardTitle className="ml-2">
+            {itemData?.title || 'セクション'} {/* Section */}
+          </CardTitle>
         </div>
         {isActive && (
           <Button
@@ -91,18 +93,21 @@ export const SectionCreator: React.FC<SectionCreatorProps> = ({
           onClick={(e) => e.stopPropagation()}
         >
           <div>
-            <Label>Section Title</Label>
+            <Label>セクションタイトル</Label> {/* Section Title */}
             <Input {...register(`items.${itemIndex}.title`)} />
           </div>
           <div>
-            <Label>Section Description (Optional)</Label>
+            <Label>セクション説明 (任意)</Label>{' '}
+            {/* Section Description (Optional) */}
             <Input {...register(`items.${itemIndex}.description`)} />
           </div>
           <div className="space-y-2 pt-4">
-            <h3 className="text-md font-semibold">Section Action</h3>
+            <h3 className="text-md font-semibold">セクションアクション</h3>{' '}
+            {/* Section Action */}
             <div className="bg-background grid grid-cols-1 gap-4 rounded-lg border p-4 md:grid-cols-2">
               <div>
-                <Label>When this section is complete...</Label>
+                <Label>このセクションが完了したとき...</Label>{' '}
+                {/* When this section is complete... */}
                 <Controller
                   control={control}
                   name={`items.${itemIndex}.action.type`}
@@ -127,17 +132,21 @@ export const SectionCreator: React.FC<SectionCreatorProps> = ({
                       }}
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="Select an action" />
+                        <SelectValue placeholder="アクションを選択" />{' '}
+                        {/* Select an action */}
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="default">
-                          Default (Go to next section)
+                          {/* Default (Go to next section) */}
+                          デフォルト (次のセクションに移動)
                         </SelectItem>
                         <SelectItem value="submit">
-                          Submit the survey
+                          {/* Submit the survey */}
+                          調査を送信
                         </SelectItem>
                         <SelectItem value="jump">
-                          Jump to a specific section
+                          {/* Jump to a specific section */}
+                          特定のセクションに移動
                         </SelectItem>
                       </SelectContent>
                     </Select>
@@ -146,25 +155,28 @@ export const SectionCreator: React.FC<SectionCreatorProps> = ({
               </div>
               {actionType === 'jump' && (
                 <div>
-                  <Label>Jump Target</Label>
+                  <Label>移動先セクション</Label> {/* Jump Target */}
                   <Controller
                     control={control}
                     name={`items.${itemIndex}.action.targetSectionId`}
-                    rules={{ required: 'A target section is required' }}
+                    rules={{ required: '移動先セクションは必須です' }} // A target section is required
                     render={({ field }) => (
                       <Select
                         onValueChange={field.onChange}
                         value={field.value || ''}
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder="Select target..." />
+                          <SelectValue
+                            placeholder="移動先セクションを選択..." // Select target...
+                          />
                         </SelectTrigger>
                         <SelectContent>
                           {sectionHeaders
                             .filter((s) => s.id !== itemData.id)
                             .map((s, i) => (
                               <SelectItem key={s.id} value={s.id}>
-                                {i + 1}: {s.title || 'Untitled Section'}
+                                {i + 1}: {s.title || '未タイトルセクション'}{' '}
+                                {/* Untitled Section */}
                               </SelectItem>
                             ))}
                         </SelectContent>

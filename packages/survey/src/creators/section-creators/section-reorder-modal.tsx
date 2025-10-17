@@ -69,9 +69,13 @@ const SortableSectionItem: React.FC<SortableSectionItemProps> = ({
         <GripVertical className="text-muted-foreground h-5 w-5" />
       </div>
       <div>
-        <p className="font-semibold">{section.title || 'Untitled Section'}</p>
+        <p className="font-semibold">
+          {section.title || '未タイトルセクション'}
+        </p>{' '}
+        {/* Untitled Section */}
         <p className="text-muted-foreground text-sm">
-          Section {index + 1} of {total}
+          {/* Section {index + 1} of {total} */}
+          セクション {index + 1} / {total}
         </p>
       </div>
     </div>
@@ -123,7 +127,10 @@ export const SectionReorderModal: React.FC<SectionReorderModalProps> = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Reorder sections</DialogTitle>
+          <DialogTitle>
+            {/* Reorder sections */}
+            セクションを移動
+          </DialogTitle>
         </DialogHeader>
         <div className="max-h-[60vh] space-y-2 overflow-y-auto p-1">
           <DndContext
@@ -148,10 +155,12 @@ export const SectionReorderModal: React.FC<SectionReorderModalProps> = ({
         </div>
         <DialogFooter>
           <Button type="button" variant="ghost" onClick={onClose}>
-            Cancel
+            {/* Cancel */}
+            キャンセル
           </Button>
           <Button type="button" onClick={() => onSave(sections)}>
-            Save
+            {/* Save */}
+            保存
           </Button>
         </DialogFooter>
       </DialogContent>

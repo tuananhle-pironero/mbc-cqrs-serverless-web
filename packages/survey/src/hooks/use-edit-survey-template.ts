@@ -65,12 +65,14 @@ export function useEditSurveyTemplate({
       async (msg) => {
         if (msg) {
           toast.success(
-            id ? 'Survey updated successfully' : 'Survey created successfully'
+            id ? 'アンケートが更新されました' : 'アンケートが作成されました' // Survey updated successfully / Survey created successfully
           )
           router.push('/dashboard/survey-management')
         } else {
           toast.error(
-            id ? 'Failed to update survey' : 'Failed to create survey'
+            id
+              ? 'アンケートの更新に失敗しました'
+              : 'アンケートの作成に失敗しました' // Failed to update survey / Failed to create survey
           )
           setSubmitting(false)
         }
@@ -110,13 +112,13 @@ export function useEditSurveyTemplate({
           })
         ).data
       } catch (error) {
-        console.error('Failed to create survey', error)
+        console.error('アンケートの作成に失敗しました', error) // Failed to create survey
         setError(error as Error)
       }
 
       if (!res?.requestId) {
         setSubmitting(false)
-        toast.error('Failed to create survey')
+        toast.error('アンケートの作成に失敗しました') // Failed to create survey
         return
       }
 
@@ -147,12 +149,12 @@ export function useEditSurveyTemplate({
           })
         ).data
       } catch (error) {
-        console.error('Failed to update survey', error)
+        console.error('アンケートの更新に失敗しました', error) // Failed to update survey
         setError(error as Error)
       }
       if (!res?.requestId) {
         setSubmitting(false)
-        toast.error('Failed to update survey')
+        toast.error('アンケートの更新に失敗しました') // Failed to update survey
         return
       }
 
@@ -176,7 +178,7 @@ export function useEditSurveyTemplate({
         setOriginalSchema(data.attributes.surveyTemplate as SurveySchemaType)
       }
     } catch (error) {
-      console.error('Failed to fetch survey data', error)
+      console.error('アンケートデータの取得に失敗しました', error) // Failed to fetch survey data
       setError(error as Error)
     } finally {
       setIsLoading(false)
@@ -200,7 +202,7 @@ export function useEditSurveyTemplate({
           setOriginalSchema(data.attributes.surveyTemplate as SurveySchemaType)
         }
       } catch (error) {
-        console.error('Failed to fetch survey data', error)
+        console.error('アンケートデータの取得に失敗しました', error) // Failed to fetch survey data
         setError(error as Error)
       } finally {
         setIsLoading(false)

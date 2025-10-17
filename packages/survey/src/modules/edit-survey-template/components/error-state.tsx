@@ -17,10 +17,15 @@ export function EditSurveyTemplateErrorState({
     <div className="container mx-auto px-4 py-8">
       <Alert variant="destructive" className="mx-auto max-w-md">
         <AlertCircle className="h-4 w-4" />
-        <AlertTitle>Failed to load survey</AlertTitle>
+        <AlertTitle>
+          {/* Failed to load survey */}
+          アンケートの読み込みに失敗しました。
+        </AlertTitle>
         <AlertDescription className="space-y-3">
           <p>
-            {error.message || 'Failed to fetch survey data. Please try again.'}
+            {/* Failed to fetch survey data. Please try again. */}
+            {error.message ||
+              'アンケートデータの取得に失敗しました。再度試してください。'}
           </p>
           <Button
             variant="outline"
@@ -29,7 +34,8 @@ export function EditSurveyTemplateErrorState({
             className="w-full"
           >
             <RefreshCw className="mr-2 h-4 w-4" />
-            Try again
+            {/* Try again */}
+            再度試す
           </Button>
         </AlertDescription>
       </Alert>

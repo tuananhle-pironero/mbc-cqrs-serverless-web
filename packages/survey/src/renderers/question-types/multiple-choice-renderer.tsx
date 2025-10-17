@@ -21,7 +21,7 @@ export const MultipleChoiceQuestionComponent: React.FC<{
       defaultValue={[]}
       rules={{
         required: question.validation?.required
-          ? 'Please select at least one option'
+          ? '最低でも1つオプションを選択してください' // Please select at least one option
           : false,
       }}
       render={({ field }) => (

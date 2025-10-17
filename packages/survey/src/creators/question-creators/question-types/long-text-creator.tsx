@@ -72,10 +72,12 @@ const LongTextValidationBuilder: React.FC<{
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem className="text-xs" value="length">
-                    Length
+                    {/* length  */}
+                    文字数
                   </SelectItem>
                   <SelectItem className="text-xs" value="regex">
-                    Regex
+                    {/* regex  */}
+                    正規表現
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -100,23 +102,33 @@ const LongTextValidationBuilder: React.FC<{
                   {validationRule?.type === 'length' && (
                     <>
                       <SelectItem className="text-xs" value="max">
-                        Max character count
+                        {/* max character count */}
+                        最大文字数
                       </SelectItem>
                       <SelectItem className="text-xs" value="min">
-                        Min character count
+                        {/* Min character count */}
+                        最小文字数
                       </SelectItem>
                     </>
                   )}
                   {validationRule?.type === 'regex' && (
                     <>
                       <SelectItem className="text-xs" value="contains">
-                        Contains
+                        {/* Contains */}
+                        含む
                       </SelectItem>
                       <SelectItem className="text-xs" value="not_contains">
-                        Doesn't contain
+                        {/* Doesn't contain */}
+                        含まない
                       </SelectItem>
-                      <SelectItem value="matches">Matches</SelectItem>
-                      <SelectItem value="not_matches">Doesn't match</SelectItem>
+                      <SelectItem value="matches">
+                        {/* Matches */}
+                        一致
+                      </SelectItem>
+                      <SelectItem value="not_matches">
+                        {/* Doesn't match */}
+                        一致しない
+                      </SelectItem>
                     </>
                   )}
                 </SelectContent>
@@ -130,7 +142,7 @@ const LongTextValidationBuilder: React.FC<{
           <div className="flex flex-grow gap-2">
             <Input
               type={validationRule?.type === 'length' ? 'number' : 'text'}
-              placeholder="Value"
+              placeholder="値" // "Value"
               className="min-w-[80px] flex-grow rounded-none border-0 border-b px-1 text-xs shadow-none placeholder:text-xs focus-visible:ring-0"
               {...register(`${validationPath}.value`)}
             />
@@ -140,7 +152,7 @@ const LongTextValidationBuilder: React.FC<{
         {/* --- Group 3: Custom Error and Close Button --- */}
         <div className="flex w-full flex-grow gap-2 sm:w-auto">
           <Input
-            placeholder="Custom error text"
+            placeholder="カスタムエラーテキスト" // "Custom error text"
             className="flex-grow rounded-none border-0 border-b px-1 text-xs shadow-none placeholder:text-xs focus-visible:ring-0"
             {...register(`${validationPath}.customError`)}
           />
@@ -168,7 +180,8 @@ export const LongTextCreator: React.FC<LongTextCreatorProps> = ({
     <>
       <div className="px-1 pt-4">
         <div className="text-muted-foreground pointer-events-none min-h-[80px] w-full rounded border border-dashed p-3 text-sm">
-          Long answer text (paragraph)
+          {/* Long answer text (paragraph) */}
+          長文回答 (段落)
         </div>
       </div>
 
@@ -185,7 +198,8 @@ export const LongTextCreator: React.FC<LongTextCreatorProps> = ({
 export const LongTextPreview: React.FC = () => {
   return (
     <div className="text-muted-foreground pointer-events-none min-h-[80px] w-full rounded border border-dashed p-3 text-sm">
-      Long answer text (paragraph)
+      {/* Long answer text (paragraph) */}
+      長文回答 (段落)
     </div>
   )
 }

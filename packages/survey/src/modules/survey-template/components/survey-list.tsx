@@ -41,9 +41,13 @@ export function EmptyState() {
   return (
     <div className="flex flex-col items-center justify-center py-12 text-center">
       <Search className="text-muted-foreground mb-4 h-12 w-12" />
-      <h3 className="mb-2 text-lg font-semibold">No surveys found</h3>
+      <h3 className="mb-2 text-lg font-semibold">
+        {/* No surveys found */}
+        アンケートが見つかりません
+      </h3>
       <p className="text-muted-foreground mb-4">
-        Get started by creating your first survey template.
+        {/* Get started by creating your first survey template. */}
+        最初のアンケートテンプレートを作成してください。
       </p>
     </div>
   )
@@ -64,7 +68,8 @@ export const SurveyList = memo<SurveyListProps>(
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
-            Failed to load surveys. Please try again later.
+            {/* Failed to load surveys. Please try again later. */}
+            <p>アンケートの読み込みに失敗しました。再度試してください。</p>
           </AlertDescription>
         </Alert>
       )

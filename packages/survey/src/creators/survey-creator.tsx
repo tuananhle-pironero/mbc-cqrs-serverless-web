@@ -48,7 +48,7 @@ import {
   SectionReorderModal,
 } from './section-creators/section-reorder-modal'
 const staticDefaultSurvey: SurveySchemaType = {
-  title: 'Untitled Survey',
+  title: '未タイル調査', // Untitled Survey
   description: '',
   items: [],
 }
@@ -110,13 +110,13 @@ export const SurveyCreator: React.FC<SurveyCreatorProps> = ({
     if (!initialSchema) {
       const newId = `sec_${Date.now()}`
       const clientSideDefault: SurveySchemaType = {
-        title: 'Untitled Survey',
+        title: '未タイトル調査', // Untitled Survey
         description: '',
         items: [
           {
             id: newId,
             type: 'section-header',
-            title: 'First Section',
+            title: '最初のセクション', // First Section
             description: '',
           },
         ],
@@ -326,7 +326,8 @@ export const SurveyCreator: React.FC<SurveyCreatorProps> = ({
         className={disabled ? 'pointer-events-none opacity-50' : ''}
       >
         <Button ref={submitButtonRef} className="hidden" type="submit">
-          Save Survey
+          {/* Save Survey */}
+          アンケートを保存
         </Button>
 
         <Tabs
@@ -339,8 +340,14 @@ export const SurveyCreator: React.FC<SurveyCreatorProps> = ({
           }}
         >
           <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="creator">Creator</TabsTrigger>
-            <TabsTrigger value="preview">Preview</TabsTrigger>
+            <TabsTrigger value="creator">
+              作成者
+              {/* Creator */}
+            </TabsTrigger>
+            <TabsTrigger value="preview">
+              プレビュー
+              {/* Preview */}
+            </TabsTrigger>
             <TabsTrigger value="json">JSON</TabsTrigger>
           </TabsList>
 
@@ -363,21 +370,23 @@ export const SurveyCreator: React.FC<SurveyCreatorProps> = ({
                         <Input
                           {...register('title')}
                           className="h-12 border-0 px-0 text-3xl font-bold shadow-none"
-                          placeholder="Survey Title"
+                          placeholder="アンケートのタイトル" // Survey Title
                         />
                         <Input
                           {...register('description')}
                           className="border-0 px-0 shadow-none"
-                          placeholder="Form description"
+                          placeholder="フォームの説明" // Form description
                         />
                       </div>
                     ) : (
                       <div>
                         <h2 className="text-3xl font-bold">
-                          {watch('title') || 'Survey Title'}
+                          {/* Survey Title */}
+                          {watch('title') || 'アンケートのタイトル'}
                         </h2>
                         <p className="text-muted-foreground mt-1">
-                          {watch('description') || 'Form description'}
+                          {/* Form description */}
+                          {watch('description') || 'フォームの説明'}
                         </p>
                       </div>
                     )}
@@ -482,7 +491,8 @@ export const SurveyCreator: React.FC<SurveyCreatorProps> = ({
                 />
               ) : (
                 <p className="text-muted-foreground py-12 text-center">
-                  Click the 'Preview' tab to see your survey.
+                  {/* Click the 'Preview' tab to see your survey. */}
+                  アンケートを確認するには、「プレビュー」タブをクリックしてください。
                 </p>
               )}
             </div>
@@ -490,7 +500,10 @@ export const SurveyCreator: React.FC<SurveyCreatorProps> = ({
 
           <TabsContent value="json" className="pt-6">
             <div className="sticky top-4">
-              <h3 className="mb-2 text-lg font-semibold">Live JSON Output</h3>
+              <h3 className="mb-2 text-lg font-semibold">
+                ライブJSON出力
+                {/* Live JSON Output */}
+              </h3>
               <pre className="bg-secondary text-secondary-foreground max-h-[80vh] overflow-auto rounded-md p-4 text-sm">
                 {JSON.stringify(watch(), null, 2)}
               </pre>
@@ -501,12 +514,18 @@ export const SurveyCreator: React.FC<SurveyCreatorProps> = ({
       <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
         <DialogContent className="max-h-[90vh] max-w-4xl overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Survey Preview</DialogTitle>
+            <DialogTitle>
+              {/* Survey Preview */}
+              アンケートプレビュー
+            </DialogTitle>
           </DialogHeader>
           {previewSchema ? (
             <SurveyForm schema={previewSchema} onSubmit={handlePreviewSubmit} />
           ) : (
-            <p>Loading preview...</p>
+            <p>
+              {/* Loading preview... */}
+              プレビューを読み込んでいます...
+            </p>
           )}
         </DialogContent>
       </Dialog>

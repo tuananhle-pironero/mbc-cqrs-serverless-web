@@ -18,7 +18,7 @@ export const ShortTextQuestionComponent: React.FC<{
       control={control}
       rules={{
         required: question.validation?.required
-          ? 'This field is required'
+          ? 'この項目は必須です' // This field is required
           : false,
         validate: (inputValue: string) => {
           const rule = question.validation?.custom
@@ -153,7 +153,7 @@ export const ShortTextQuestionComponent: React.FC<{
           <Input
             {...field}
             id={question.id}
-            placeholder="Type your answer here..."
+            placeholder="ここに回答を入力してください..." // Type your answer here...
           />
         </QuestionWrapper>
       )}

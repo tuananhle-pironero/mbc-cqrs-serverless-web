@@ -15,7 +15,7 @@ export const DateCreator: React.FC<DateCreatorProps> = ({ itemPath }) => {
   const includeTime: boolean = watch(`${itemPath}.includeTime`)
   const includeYear: boolean = watch(`${itemPath}.includeYear`)
 
-  const datePlaceholder = ['Month, day', includeYear !== false && ', year']
+  const datePlaceholder = ['月, 日', includeYear !== false && '年'] // 'Month, day', includeYear !== false && ', year'
     .filter(Boolean)
     .join('')
 
@@ -33,7 +33,7 @@ export const DateCreator: React.FC<DateCreatorProps> = ({ itemPath }) => {
         <div className="flex items-center gap-2">
           <Input
             disabled
-            placeholder="Time"
+            placeholder="時間" // "Time"
             className="border-0 border-b shadow-none"
           />
           <Clock className="text-muted-foreground h-5 w-5 bg-transparent" />

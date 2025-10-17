@@ -64,8 +64,10 @@ export const SingleChoicePreview: React.FC<SingleChoicePreviewProps> = ({
       ))}
       {questionData.options && questionData.options.length > 3 && (
         <p className="text-muted-foreground text-sm">
-          +{questionData.options.length - 3} more options
-          {(questionData as any).validation?.shuffleOptions && ' (shuffled)'}
+          {/* more options */}+{questionData.options.length - 3}{' '}
+          個の追加オプション
+          {/* shuffled */}
+          {(questionData as any).validation?.shuffleOptions && ' (シャッフル)'}
         </p>
       )}
     </div>

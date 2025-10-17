@@ -42,7 +42,6 @@ const TimePicker = ({ value, onTimeChange, disabled }: TimePickerProps) => {
       {/* <ClockIcon className="h-5 w-5 text-gray-400" /> */}
       <Select
         onValueChange={(val) => onTimeChange('hours', val)}
-        // FIX: Use padStart to match option values and handle null/undefined
         value={value ? value.getHours().toString().padStart(2, '0') : ''}
         disabled={disabled || !value}
       >

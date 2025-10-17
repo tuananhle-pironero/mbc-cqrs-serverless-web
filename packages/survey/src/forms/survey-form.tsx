@@ -160,7 +160,11 @@ export const SurveyForm: React.FC<SurveyFormProps> = ({ schema, onSubmit }) => {
   }
 
   if (!currentSection) {
-    return <div className="p-8 text-center">This survey has no content.</div>
+    return (
+      <div className="p-8 text-center">
+        このアンケートにはコンテンツがありません。
+      </div>
+    ) // This survey has no content.
   }
 
   return (
@@ -261,7 +265,8 @@ export const SurveyForm: React.FC<SurveyFormProps> = ({ schema, onSubmit }) => {
           <div>
             {sectionHistory.length > 1 && (
               <Button type="button" variant="outline" onClick={handleBack}>
-                Back
+                {/* Back */}
+                前へ
               </Button>
             )}
           </div>
@@ -272,7 +277,8 @@ export const SurveyForm: React.FC<SurveyFormProps> = ({ schema, onSubmit }) => {
                 key="submit-btn"
                 onClick={handleSubmit(onFormSubmit)}
               >
-                Submit Survey
+                {/* Submit Survey */}
+                アンケートを送信
               </Button>
             ) : (
               <Button
@@ -280,7 +286,8 @@ export const SurveyForm: React.FC<SurveyFormProps> = ({ schema, onSubmit }) => {
                 key={`next-btn-${currentSection.id}`}
                 onClick={handleNextSection}
               >
-                Next
+                {/* Next */}
+                次へ
               </Button>
             )}
           </div>

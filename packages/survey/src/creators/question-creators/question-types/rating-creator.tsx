@@ -80,17 +80,17 @@ export const RatingCreator: React.FC<RatingCreatorProps> = ({ itemPath }) => {
               <SelectContent>
                 <SelectItem className="text-xs" value="star">
                   <div className="flex items-center gap-2">
-                    <Star className="h-4 w-4" /> Star
+                    <Star className="h-4 w-4" /> {/* Star */} 星
                   </div>
                 </SelectItem>
                 <SelectItem className="text-xs" value="heart">
                   <div className="flex items-center gap-2">
-                    <Heart className="h-4 w-4" /> Heart
+                    <Heart className="h-4 w-4" /> {/* Heart */} 心
                   </div>
                 </SelectItem>
                 <SelectItem className="text-xs" value="thumb">
                   <div className="flex items-center gap-2">
-                    <ThumbsUp className="h-4 w-4" /> Thumb
+                    <ThumbsUp className="h-4 w-4" /> {/* Thumb */} 拇指
                   </div>
                 </SelectItem>
               </SelectContent>

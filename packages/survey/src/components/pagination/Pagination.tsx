@@ -89,7 +89,7 @@ export const Pagination = ({
               <SelectContent>
                 {pageSizeOptions.map((option) => (
                   <SelectItem key={option} value={String(option)}>
-                    {option} / page
+                    {option} / {/* page */}ページ
                   </SelectItem>
                 ))}
               </SelectContent>

@@ -44,7 +44,7 @@ export const DropdownQuestionComponent: React.FC<{
       control={control}
       rules={{
         required: question.validation?.required
-          ? 'Please select an option'
+          ? 'オプションを選択してください' // Please select an option
           : false,
       }}
       render={({ field }) => (
@@ -56,7 +56,8 @@ export const DropdownQuestionComponent: React.FC<{
         >
           <Select onValueChange={field.onChange} value={field.value}>
             <SelectTrigger>
-              <SelectValue placeholder="Choose an option..." />
+              <SelectValue placeholder="オプションを選択してください..." /> //
+              Choose an option...
             </SelectTrigger>
             <SelectContent>
               {shuffledOptions.map((option) => (

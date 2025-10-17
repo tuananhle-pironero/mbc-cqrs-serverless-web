@@ -34,7 +34,7 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({
         variant="ghost"
         size="icon"
         onClick={() => onAddQuestion(context.index)}
-        title="Add Question"
+        title="質問を追加" // Add Question
       >
         <Plus className="h-5 w-5" />
       </Button>
@@ -43,7 +43,7 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({
         variant="ghost"
         size="icon"
         disabled
-        title="Import Questions (coming soon)"
+        title="質問をインポート (将来実装予定)" // Import Questions (coming soon)
       >
         <Text className="h-5 w-5" />
       </Button>
@@ -52,7 +52,7 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({
         variant="ghost"
         size="icon"
         disabled
-        title="Add Title & Description (coming soon)"
+        title="タイトルと説明を追加 (将来実装予定)" // Add Title & Description (coming soon)
       >
         <Type className="h-5 w-5" />
       </Button>
@@ -62,7 +62,7 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({
         variant="ghost"
         size="icon"
         onClick={() => onAddSection(context.index)}
-        title="Add Section"
+        title="セクションを追加" // Add Section
       >
         <Tally4 className="h-5 w-5" />
       </Button>

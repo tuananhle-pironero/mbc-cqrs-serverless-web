@@ -44,7 +44,7 @@ export const SurveyCard = memo<SurveyCardProps>(({ survey, onClick }) => {
           onClick(survey)
         }
       }}
-      aria-label={`View survey template: ${survey.name}`}
+      aria-label={`View survey template: ${survey.name}`} // View survey template: ${survey.name}
     >
       <CardHeader className="pb-4">
         <div className="space-y-2">
@@ -64,13 +64,15 @@ export const SurveyCard = memo<SurveyCardProps>(({ survey, onClick }) => {
               <div className="text-muted-foreground flex items-center gap-1.5">
                 <FileText className="text-primary h-4 w-4" />
                 <span className="text-sm font-medium">
-                  {questionCount} questions
+                  {/* questions */}
+                  {questionCount} 質問
                 </span>
               </div>
               <div className="text-muted-foreground flex items-center gap-1.5">
                 <Layers className="text-primary h-4 w-4" />
                 <span className="text-sm font-medium">
-                  {sectionCount} sections
+                  {/* sections */}
+                  {sectionCount} セクション
                 </span>
               </div>
             </div>

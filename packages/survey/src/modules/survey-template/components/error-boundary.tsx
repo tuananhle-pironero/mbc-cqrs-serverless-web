@@ -50,7 +50,8 @@ export class SurveyTemplateErrorBoundary extends Component<
         <Alert variant="destructive" className="mx-auto max-w-md">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription className="space-y-2">
-            <p>Something went wrong while loading survey templates.</p>
+            {/* Something went wrong while loading survey templates. */}
+            <p>アンケートテンプレートの読み込みに失敗しました。</p>
             <Button
               variant="outline"
               size="sm"
@@ -58,7 +59,8 @@ export class SurveyTemplateErrorBoundary extends Component<
               className="mt-2"
             >
               <RefreshCw className="mr-2 h-4 w-4" />
-              Try again
+              {/* Try again */}
+              再度試す
             </Button>
           </AlertDescription>
         </Alert>

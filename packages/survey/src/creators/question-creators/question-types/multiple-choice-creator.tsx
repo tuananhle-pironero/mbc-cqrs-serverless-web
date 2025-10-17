@@ -52,31 +52,35 @@ const MultipleChoiceValidationBuilder: React.FC<{
               <SelectTrigger className="w-[180px] border-0" size="xs">
                 <SelectValue
                   className="text-xs placeholder:text-xs"
-                  placeholder="Select a rule..."
+                  placeholder="ルールを選択..." // "Select a rule..."
                 />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem className="text-xs" value="min">
-                  Select at least
+                  {/* Select at least */}
+                  最低でも
                 </SelectItem>
                 <SelectItem className="text-xs" value="max">
-                  Select at most
+                  {/* Select at most */}
+                  最大でも
                 </SelectItem>
                 <SelectItem className="text-xs" value="exact">
-                  Select exactly
+                  {/* Select exactly */}
+                  正確に
                 </SelectItem>
               </SelectContent>
             </Select>
           )}
         />
+        {/* Number */}
         <Input
           type="number"
-          placeholder="Number"
+          placeholder="数値" // "Number"
           className="flex-grow rounded-none border-0 border-b px-1 text-xs shadow-none placeholder:text-xs focus-visible:ring-0"
           {...register(`${validationPath}.value`, { valueAsNumber: true })}
         />
         <Input
-          placeholder="Custom error text"
+          placeholder="カスタムエラーテキスト" // "Custom error text"
           className="flex-grow rounded-none border-0 border-b px-1 text-xs shadow-none placeholder:text-xs focus-visible:ring-0"
           {...register(`${validationPath}.customError`)}
         />
@@ -143,8 +147,10 @@ export const MultipleChoicePreview: React.FC<MultipleChoicePreviewProps> = ({
       ))}
       {questionData.options && questionData.options.length > 3 && (
         <p className="text-muted-foreground text-sm">
-          +{questionData.options.length - 3} more options
-          {(questionData as any).validation?.shuffleOptions && ' (shuffled)'}
+          {/* more options  */}+{questionData.options.length - 3}{' '}
+          個の追加オプション
+          {/* shuffled */}
+          {(questionData as any).validation?.shuffleOptions && ' (シャッフル)'}
         </p>
       )}
     </div>

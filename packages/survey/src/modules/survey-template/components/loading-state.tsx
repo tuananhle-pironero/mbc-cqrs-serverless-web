@@ -13,7 +13,7 @@ export function SurveyTemplateLoadingState({
       className="flex items-start justify-center p-4"
       style={{ minHeight: height, maxHeight: '500px' }}
       role="status"
-      aria-label="Loading survey templates"
+      aria-label="Loading survey templates" // Loading survey templates
     >
       <div className="grid w-full grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
         {Array.from({ length: 6 }).map((_, i) => (

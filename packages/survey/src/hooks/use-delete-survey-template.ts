@@ -28,11 +28,11 @@ export function useDeleteSurveyTemplate({
       async (msg) => {
         setIsDeleting(false)
         if (msg) {
-          toast.success('Survey template deleted successfully')
+          toast.success('アンケートテンプレートが削除されました') // Survey template deleted successfully
           onSuccess?.()
           router.push('/dashboard/survey-management')
         } else {
-          toast.error('Failed to delete survey template')
+          toast.error('アンケートテンプレートの削除に失敗しました') // Failed to delete survey template
         }
       },
       [router, onSuccess]
@@ -54,15 +54,15 @@ export function useDeleteSurveyTemplate({
           >(`/api/survey-template/${id}`)
         ).data
       } catch (error) {
-        console.error('Failed to delete survey template', error)
+        console.error('アンケートテンプレートの削除に失敗しました', error) // Failed to delete survey template
         setIsDeleting(false)
-        toast.error('Failed to delete survey template')
+        toast.error('アンケートテンプレートの削除に失敗しました') // Failed to delete survey template
         return
       }
 
       if (!res?.requestId) {
         setIsDeleting(false)
-        toast.error('Failed to delete survey template')
+        toast.error('アンケートテンプレートの削除に失敗しました') // Failed to delete survey template
         return
       }
 
