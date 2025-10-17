@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.20](https://github.com/mbc-net/mbc-cqrs-serverless-web/compare/v0.0.19...v0.0.20) (2025-10-17)
+
+### Features
+
+- update survey components with Japanese translations for labels and placeholders ([72c363b](https://github.com/mbc-net/mbc-cqrs-serverless-web/commit/72c363b034e4f6e69c89d89f7c80cec767cde16c))
+
 ## [0.0.19](https://github.com/mbc-net/mbc-cqrs-serverless-web/compare/v0.0.18...v0.0.19) (2025-10-17)
 
 ### Features
