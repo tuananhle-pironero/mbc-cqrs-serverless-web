@@ -115,7 +115,7 @@ function ModalContent({
         <ImportJSONButton disabled={submitting} onAdd={setValue} />
         <DownloadJSONButton
           disabled={submitting}
-          fileName="master-setting.json"
+          fileName="master-setting-bulk.json"
           data={value}
         />
         <Button type="button" loading={submitting} onClick={saveData}>
@@ -207,7 +207,12 @@ export default function AddJsonData({
         await httpClient.post<SettingDataEntity[]>(
           API_URLS.SETTING.CREATE_BULK,
           {
-            items: data,
+            items: data.map((item) => ({
+              ...item,
+              settingValue: {
+                ...item.attributes,
+              },
+            })),
           }
         )
       ).data

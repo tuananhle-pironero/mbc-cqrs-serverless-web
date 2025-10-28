@@ -37,6 +37,9 @@ import { MasterRdsEntity } from '../../../types/MasterRdsEntity'
 import { MasterRdsListEntity } from '../../../types/MasterRdsListEntity'
 import { PaginateProps } from '../../../types/pagination'
 import { DataTableColumnHeader } from '../../../components/table/data-table-column-header'
+import AddJsonData from '../components/AddJsonData'
+import { toast } from 'src/components/ui/use-toast'
+import '../../../components/JsonEditor'
 
 export default function MasterSetting() {
   const user = useUserContext()
@@ -277,7 +280,16 @@ export default function MasterSetting() {
         </div>
       </div>
 
-      <div className="mx-3 mb-2 flex justify-end pt-3">
+      <div className="mx-3 mb-2 flex justify-end gap-2 pt-3">
+        <AddJsonData
+          tenantCode={tenantCode}
+          onSave={() => {
+            toast({
+              description: '登録しました。',
+              variant: 'success',
+            })
+          }}
+        />
         <CommonButton variant="primary" onClick={onClickCreate}>
           新規作成
         </CommonButton>
