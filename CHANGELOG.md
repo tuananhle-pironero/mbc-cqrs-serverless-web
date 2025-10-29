@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.21](https://github.com/mbc-net/mbc-cqrs-serverless-web/compare/v0.0.20...v0.0.21) (2025-10-29)
+
+### Features
+
+- enhance master settings with bulk import ([4af9fc0](https://github.com/mbc-net/mbc-cqrs-serverless-web/commit/4af9fc07dff0939b1052d85905de7b823b8c888c))
+- implement bulk command status hook and update components for bulk data import ([c7d8fa4](https://github.com/mbc-net/mbc-cqrs-serverless-web/commit/c7d8fa406412a238734de5dbe4d17bbcf36a31e1))
+
 ## [0.0.20](https://github.com/mbc-net/mbc-cqrs-serverless-web/compare/v0.0.19...v0.0.20) (2025-10-17)
 
 ### Features
