@@ -63,6 +63,7 @@ export class AppClient {
     if (!AppClient.instance) {
       AppClient.instance = axios.create({
         baseURL: process.env.NEXT_PUBLIC_MASTER_API_BASE,
+        timeout: 0,
         headers: {
           ...headers,
         },

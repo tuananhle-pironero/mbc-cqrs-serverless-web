@@ -2,7 +2,7 @@
 
 import { SaveIcon } from 'lucide-react'
 import dynamic from 'next/dynamic'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import DownloadJSONButton from '../../../../components/buttons/DownloadJSONButton'
 import ImportJSONButton from '../../../../components/buttons/ImportJSONButton'
@@ -10,7 +10,7 @@ import Modal from '../../../../components/DragResizeModal'
 import { Button } from '../../../../components/ui/button'
 import { useToast } from '../../../../components/ui/use-toast'
 import { API_URLS } from '../../../../lib/constants/url'
-import { useSubscribeCommandStatus } from '../../../../lib/hook/useSubscribeMessage'
+import { useSubscribeBulkCommandStatus } from '../../../../lib/hook/useSubscribeMessage'
 import { removeSortKeyVersion } from '../../../../lib/utils/removeSortKeyVersion'
 import { useHttpClient } from '../../../../provider'
 import { DataSettingDataEntity } from '../../../../types'
@@ -53,6 +53,7 @@ function ModalContent({
                 settingCode: { type: 'string' },
                 code: { type: 'string' },
                 name: { type: 'string' },
+                seq: { type: 'number' },
                 attributes: { type: 'object' },
               },
               required: ['settingCode', 'code', 'name', 'attributes'],
@@ -75,7 +76,7 @@ function ModalContent({
         <ImportJSONButton disabled={submitting} onAdd={setValue} />
         <DownloadJSONButton
           disabled={submitting}
-          fileName="master-data.json"
+          fileName="master-data-bulk.json"
           data={value}
         />
         <Button type="button" loading={submitting} onClick={saveData}>
@@ -125,6 +126,7 @@ export default function AddJsonData({
   const [submitting, setSubmitting] = useState(false)
   const [open, setOpen] = useState(false)
   const [savedValue, setSavedValue] = useState<DataSettingDataEntity[]>([])
+  const [expectedCount, setExpectedCount] = useState(0)
   const httpClient = useHttpClient()
   const isObject = (data: any) => {
     return typeof data === 'object' && !Array.isArray(data) && data !== null
@@ -139,12 +141,17 @@ export default function AddJsonData({
     }
     for (const item of data) {
       if (!isObject(item)) return false
+      // Check for existence of all required properties
       if (
-        !item?.settingCode ||
-        !item?.code ||
-        !item?.name ||
-        !item?.attributes
+        !('settingCode' in item) ||
+        !('code' in item) ||
+        !('name' in item) ||
+        !('attributes' in item) ||
+        !('seq' in item)
       ) {
+        return false
+      }
+      if (typeof item.seq !== 'number') {
         return false
       }
       if (!isObject(item.attributes)) {
@@ -154,26 +161,45 @@ export default function AddJsonData({
 
     return true
   }
-  const { start } = useSubscribeCommandStatus(tenantCode, async (msg) => {
-    if (msg) {
+
+  const { start, stop, finishedCount } = useSubscribeBulkCommandStatus(
+    tenantCode,
+    () => {
+      // Timeout callback
       setSubmitting(false)
       setOpen(false)
-      onSave(savedValue)
-      toast({
-        description: '登録しました。',
-        variant: 'success',
-      })
-    } else {
-      setSubmitting(false)
-      setOpen(false)
+      setExpectedCount(0)
       toast({
         title: 'データ登録に失敗しました。',
-        description: '入力内容を確認した上で再度やり直してください。',
+        description:
+          'タイムアウトしました。入力内容を確認した上で再度やり直してください。',
         variant: 'destructive',
       })
       router.refresh()
     }
-  })
+  )
+
+  // Track when all items are finished
+  useEffect(() => {
+    if (finishedCount === 0 || expectedCount === 0) return
+
+    // Show toast for each completed item
+    toast({
+      description: `登録しました (${finishedCount}/${expectedCount})`,
+      variant: 'success',
+    })
+
+    // Check if all items are finished
+    if (finishedCount >= expectedCount) {
+      stop()
+      setSubmitting(false)
+      setOpen(false)
+      setExpectedCount(0)
+
+      // Call onSave to refresh data
+      onSave(savedValue)
+    }
+  }, [finishedCount, expectedCount, savedValue, onSave, toast, stop])
 
   const saveData = async () => {
     const data = JSON.parse(value)
@@ -199,15 +225,20 @@ export default function AddJsonData({
     } catch (error) {
       console.error(error)
       setSubmitting(false)
+      setExpectedCount(0)
     }
 
     if (!res?.[0].requestId) {
+      setSubmitting(false)
+      setExpectedCount(0)
       toast({
         title: 'データ登録に失敗しました。',
         description: '入力内容を確認した上で再度やり直してください。',
         variant: 'destructive',
       })
     } else {
+      // Set expected count based on response length
+      setExpectedCount(res.length)
       setSavedValue(
         res.map((item) => ({ ...item, sk: removeSortKeyVersion(item.sk) }))
       )
@@ -215,8 +246,25 @@ export default function AddJsonData({
     }
   }
 
+  const searchParam = useSearchParams()
+  const typeCode = searchParam.get('typeCode').split('#')[1]
+
+  const sampleDataJson = JSON.stringify([
+    {
+      settingCode: typeCode, // Get typeCodeId from url
+      name: '',
+      seq: 0,
+      code: '',
+      attributes: {
+        seq: 0,
+        code: '',
+        name: '',
+      },
+    },
+  ])
+
   useEffect(() => {
-    setValue(jsonValue || '')
+    setValue(jsonValue || sampleDataJson)
   }, [jsonValue])
 
   return (

@@ -56,7 +56,7 @@ export const isValidSettingJson = (data: any) => {
     if (!isObject(item)) {
       return false
     }
-    if (!item?.code || !item?.name || !item?.attributes) {
+    if (!('code' in item) || !('name' in item) || !('attributes' in item)) {
       return false
     }
     if (!isObject(item.attributes)) {
@@ -68,9 +68,9 @@ export const isValidSettingJson = (data: any) => {
     }
     for (const field of attrs.fields) {
       if (
-        !field?.physicalName ||
-        !field?.name ||
-        !field?.dataType ||
+        !('physicalName' in field) ||
+        !('name' in field) ||
+        !('dataType' in field) ||
         typeof field?.isRequired !== 'boolean' ||
         typeof field?.isShowedOnList !== 'boolean'
       ) {

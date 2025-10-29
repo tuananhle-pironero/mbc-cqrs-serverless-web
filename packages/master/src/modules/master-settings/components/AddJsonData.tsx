@@ -10,7 +10,7 @@ import Modal from '../../../components/DragResizeModal'
 import { Button } from '../../../components/ui/button'
 import { useToast } from '../../../components/ui/use-toast'
 import { API_URLS } from '../../../lib/constants/url'
-import { useSubscribeCommandStatus } from '../../../lib/hook/useSubscribeMessage'
+import { useSubscribeBulkCommandStatus } from '../../../lib/hook/useSubscribeMessage'
 import { removeSortKeyVersion } from '../../../lib/utils/removeSortKeyVersion'
 import { useHttpClient } from '../../../provider'
 import { SettingDataEntity } from '../../../types'
@@ -168,27 +168,47 @@ export default function AddJsonData({
   const [submitting, setSubmitting] = useState(false)
   const [open, setOpen] = useState(false)
   const [savedData, setSavedData] = useState<SettingDataEntity[]>([])
+  const [expectedCount, setExpectedCount] = useState(0)
   const httpClient = useHttpClient()
-  const { start } = useSubscribeCommandStatus(tenantCode, async (msg) => {
-    if (msg) {
+
+  const { start, stop, finishedCount } = useSubscribeBulkCommandStatus(
+    tenantCode,
+    () => {
+      // Timeout callback
       setSubmitting(false)
       setOpen(false)
-      onSave(savedData)
-      toast({
-        description: '登録しました。',
-        variant: 'success',
-      })
-    } else {
-      setSubmitting(false)
-      setOpen(false)
+      setExpectedCount(0)
       toast({
         title: 'データ登録に失敗しました。',
-        description: '入力内容を確認した上で再度やり直してください。',
+        description:
+          'タイムアウトしました。入力内容を確認した上で再度やり直してください。',
         variant: 'destructive',
       })
       router.refresh()
     }
-  })
+  )
+
+  // Track when all items are finished
+  useEffect(() => {
+    if (finishedCount === 0 || expectedCount === 0) return
+
+    // Show toast for each completed item
+    toast({
+      description: `登録しました (${finishedCount}/${expectedCount})`,
+      variant: 'success',
+    })
+
+    // Check if all items are finished
+    if (finishedCount >= expectedCount) {
+      stop()
+      setSubmitting(false)
+      setOpen(false)
+      setExpectedCount(0)
+
+      // Call onSave to refresh data
+      onSave(savedData)
+    }
+  }, [finishedCount, expectedCount, savedData, onSave, toast, stop])
 
   const saveData = async () => {
     const data = JSON.parse(value)
@@ -219,16 +239,20 @@ export default function AddJsonData({
     } catch (error) {
       console.error(error)
       setSubmitting(false)
+      setExpectedCount(0)
     }
 
     if (!res?.[0].requestId) {
       setSubmitting(false)
+      setExpectedCount(0)
       toast({
         title: 'データ登録に失敗しました。',
         description: '入力内容を確認した上で再度やり直してください。',
         variant: 'destructive',
       })
     } else {
+      // Set expected count based on response length
+      setExpectedCount(res.length)
       start(res[0].requestId)
       setSavedData(
         res.map((item) => ({ ...item, sk: removeSortKeyVersion(item.sk) }))

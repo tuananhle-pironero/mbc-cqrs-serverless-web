@@ -283,11 +283,9 @@ export default function MasterSetting() {
       <div className="mx-3 mb-2 flex justify-end gap-2 pt-3">
         <AddJsonData
           tenantCode={tenantCode}
-          onSave={() => {
-            toast({
-              description: '登録しました。',
-              variant: 'success',
-            })
+          onSave={async () => {
+            // Refresh data after all items are successfully created
+            await initSearch()
           }}
         />
         <CommonButton variant="primary" onClick={onClickCreate}>

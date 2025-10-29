@@ -49,6 +49,9 @@ import { MasterRdsListEntity } from '../../../types/MasterRdsListEntity'
 import { Paginate } from '../../../types/common'
 import { SearchPropsMasterData } from '../../../types/master-data'
 import { PaginateProps } from '../../../types/pagination'
+import AddJsonData from '../components/ActionBar/AddJsonData'
+import '../../../components/JsonEditor'
+import { toast } from 'src/components/ui/use-toast'
 
 export enum AccordionValue {
   SETTING = 'setting',
@@ -518,6 +521,13 @@ export default function MasterData() {
             <AccordionContent className="flex flex-col justify-center">
               <>
                 <div className="my-3 flex justify-end gap-4 px-3">
+                  <AddJsonData
+                    tenantCode={tenantCode}
+                    onSave={async () => {
+                      // Refresh data after all items are successfully created
+                      await initSearch()
+                    }}
+                  />
                   <Button
                     onClick={() =>
                       router.push(
