@@ -41,6 +41,59 @@ export const sampleSettingJson = JSON.stringify([
   },
 ])
 
+// Combined sample showing both Master Settings and Master Data
+export const sampleMixedJson = JSON.stringify([
+  {
+    code: 'MASTER_SETTING_CODE',
+    name: 'マスター設定サンプル',
+    attributes: {
+      description: '',
+      fields: [
+        {
+          physicalName: 'code',
+          name: 'コード',
+          description: '',
+          dataType: 'string',
+          defaultValue: '',
+          isRequired: true,
+          isShowedOnList: true,
+          length: '255',
+          uiComponent: 'string',
+        },
+        {
+          physicalName: 'name',
+          name: '名称',
+          description: '',
+          dataType: 'string',
+          isRequired: true,
+          isShowedOnList: true,
+          length: '255',
+          uiComponent: 'string',
+        },
+        {
+          physicalName: 'seq',
+          name: '並び順',
+          description: '',
+          dataType: 'number',
+          defaultValue: '',
+          isRequired: false,
+          isShowedOnList: true,
+          uiComponent: 'string',
+        },
+      ],
+    },
+  },
+  {
+    settingCode: 'SETTING_CODE',
+    code: 'MASTER_DATA_CODE',
+    name: 'マスターデータサンプル',
+    seq: 0,
+    attributes: {
+      description: '',
+    },
+  },
+])
+
 const isObject = (data: any) => {
   return typeof data === 'object' && !Array.isArray(data) && data !== null
 }
@@ -78,5 +131,32 @@ export const isValidSettingJson = (data: any) => {
       }
     }
   }
+  return true
+}
+
+export const isValidMasterDataJson = (data: any) => {
+  if (!isArray(data)) {
+    return false
+  }
+  for (const item of data) {
+    if (!isObject(item)) return false
+    // Check for existence of all required properties
+    if (
+      !('settingCode' in item) ||
+      !('code' in item) ||
+      !('name' in item) ||
+      !('attributes' in item) ||
+      !('seq' in item)
+    ) {
+      return false
+    }
+    if (typeof item.seq !== 'number') {
+      return false
+    }
+    if (!isObject(item.attributes)) {
+      return false
+    }
+  }
+
   return true
 }

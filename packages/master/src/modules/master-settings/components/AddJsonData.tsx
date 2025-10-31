@@ -13,9 +13,68 @@ import { API_URLS } from '../../../lib/constants/url'
 import { useSubscribeBulkCommandStatus } from '../../../lib/hook/useSubscribeMessage'
 import { removeSortKeyVersion } from '../../../lib/utils/removeSortKeyVersion'
 import { useHttpClient } from '../../../provider'
-import { SettingDataEntity } from '../../../types'
-import { isValidSettingJson, sampleSettingJson } from '../schema'
+import { DataSettingDataEntity, SettingDataEntity } from '../../../types'
+import {
+  isValidMasterDataJson,
+  isValidSettingJson,
+  sampleMixedJson,
+  sampleSettingJson,
+} from '../schema'
 import JSONEditorComponent from '../../../components/JSONEditorComponent'
+
+// Detection functions to identify item types
+function isMasterSettingsItem(item: any): boolean {
+  return (
+    typeof item === 'object' &&
+    item !== null &&
+    'code' in item &&
+    'name' in item &&
+    'attributes' in item &&
+    typeof item.attributes === 'object' &&
+    item.attributes !== null &&
+    Array.isArray(item.attributes.fields)
+  )
+}
+
+function isMasterDataItem(item: any): boolean {
+  return (
+    typeof item === 'object' &&
+    item !== null &&
+    'settingCode' in item &&
+    'code' in item &&
+    'name' in item &&
+    'attributes' in item &&
+    'seq' in item &&
+    typeof item.seq === 'number'
+  )
+}
+
+// Split data array into Settings, Data, and Invalid items
+function splitDataByType(data: any[]): {
+  settings: any[]
+  data: any[]
+  invalid: any[]
+} {
+  const settings: any[] = []
+  const dataItems: any[] = []
+  const invalid: any[] = []
+
+  for (const item of data) {
+    const isSettings = isMasterSettingsItem(item)
+    const isData = isMasterDataItem(item)
+
+    // Prioritize Data over Settings if both match
+    if (isData) {
+      dataItems.push(item)
+    } else if (isSettings) {
+      settings.push(item)
+    } else {
+      invalid.push(item)
+    }
+  }
+
+  return { settings, data: dataItems, invalid }
+}
 
 function ModalContent({
   open,
@@ -49,52 +108,72 @@ function ModalContent({
           schema={{
             type: 'array',
             items: {
-              type: 'object',
-              properties: {
-                code: { type: 'string' },
-                name: { type: 'string' },
-                attributes: { $ref: '/schemas/attributes' },
-              },
-              required: ['code', 'name', 'attributes'],
-
-              $defs: {
-                attributes: {
-                  $id: '/schemas/attributes',
+              oneOf: [
+                {
+                  // Master Settings schema
                   type: 'object',
                   properties: {
-                    description: { type: 'string' },
-                    fields: {
-                      type: 'array',
-                      items: { $ref: '/schemas/fields' },
-                    },
-                  },
-                  required: ['fields'],
-                },
-                fields: {
-                  $id: '/schemas/fields',
-                  type: 'object',
-                  properties: {
-                    physicalName: { type: 'string' },
+                    code: { type: 'string' },
                     name: { type: 'string' },
-                    description: { type: 'string' },
-                    dataType: { enum: ['string', 'number', 'json', 'date'] },
-                    min: { type: 'string' },
-                    max: { type: 'string' },
-                    length: { type: 'string' },
-                    maxRow: { type: 'number' },
-                    defaultValue: { type: 'string' },
-                    isRequired: { type: 'boolean' },
-                    isShowedOnList: { type: 'boolean' },
-                    dataFormat: { type: 'string' },
+                    attributes: { $ref: '#/definitions/settingsAttributes' },
+                  },
+                  required: ['code', 'name', 'attributes'],
+                },
+                {
+                  // Master Data schema
+                  type: 'object',
+                  properties: {
+                    settingCode: { type: 'string' },
+                    code: { type: 'string' },
+                    name: { type: 'string' },
+                    seq: { type: 'number' },
+                    attributes: { type: 'object' },
                   },
                   required: [
-                    'physicalName',
+                    'settingCode',
+                    'code',
                     'name',
-                    'dataType',
-                    'isRequired',
-                    'isShowedOnList',
+                    'seq',
+                    'attributes',
                   ],
                 },
+              ],
+            },
+            definitions: {
+              settingsAttributes: {
+                type: 'object',
+                properties: {
+                  description: { type: 'string' },
+                  fields: {
+                    type: 'array',
+                    items: { $ref: '#/definitions/fields' },
+                  },
+                },
+                required: ['fields'],
+              },
+              fields: {
+                type: 'object',
+                properties: {
+                  physicalName: { type: 'string' },
+                  name: { type: 'string' },
+                  description: { type: 'string' },
+                  dataType: { enum: ['string', 'number', 'json', 'date'] },
+                  min: { type: 'string' },
+                  max: { type: 'string' },
+                  length: { type: 'string' },
+                  maxRow: { type: 'number' },
+                  defaultValue: { type: 'string' },
+                  isRequired: { type: 'boolean' },
+                  isShowedOnList: { type: 'boolean' },
+                  dataFormat: { type: 'string' },
+                },
+                required: [
+                  'physicalName',
+                  'name',
+                  'dataType',
+                  'isRequired',
+                  'isShowedOnList',
+                ],
               },
             },
           }}
@@ -160,108 +239,276 @@ export default function AddJsonData({
 }: {
   tenantCode: string
   jsonValue?: string
-  onSave: (setting: SettingDataEntity[]) => void
+  onSave?: (result: {
+    settings?: SettingDataEntity[]
+    data?: DataSettingDataEntity[]
+  }) => void
 }) {
   const router = useRouter()
   const { toast } = useToast()
   const [value, setValue] = useState<string>('')
   const [submitting, setSubmitting] = useState(false)
   const [open, setOpen] = useState(false)
-  const [savedData, setSavedData] = useState<SettingDataEntity[]>([])
-  const [expectedCount, setExpectedCount] = useState(0)
+  const [savedSettingsData, setSavedSettingsData] = useState<
+    SettingDataEntity[]
+  >([])
+  const [savedDataData, setSavedDataData] = useState<DataSettingDataEntity[]>(
+    []
+  )
+  const [settingsExpectedCount, setSettingsExpectedCount] = useState(0)
+  const [dataExpectedCount, setDataExpectedCount] = useState(0)
   const httpClient = useHttpClient()
 
-  const { start, stop, finishedCount } = useSubscribeBulkCommandStatus(
-    tenantCode,
-    () => {
-      // Timeout callback
-      setSubmitting(false)
-      setOpen(false)
-      setExpectedCount(0)
-      toast({
-        title: 'データ登録に失敗しました。',
-        description:
-          'タイムアウトしました。入力内容を確認した上で再度やり直してください。',
-        variant: 'destructive',
-      })
-      router.refresh()
-    }
-  )
+  const {
+    start: startSettings,
+    stop: stopSettings,
+    finishedCount: settingsFinishedCount,
+  } = useSubscribeBulkCommandStatus(tenantCode, () => {
+    // Timeout callback for Settings
+    setSubmitting(false)
+    setOpen(false)
+    setSettingsExpectedCount(0)
+    toast({
+      title: 'マスター設定の登録に失敗しました。',
+      description:
+        'タイムアウトしました。入力内容を確認した上で再度やり直してください。',
+      variant: 'destructive',
+    })
+    router.refresh()
+  })
 
-  // Track when all items are finished
+  const {
+    start: startData,
+    stop: stopData,
+    finishedCount: dataFinishedCount,
+  } = useSubscribeBulkCommandStatus(tenantCode, () => {
+    // Timeout callback for Data
+    setSubmitting(false)
+    setOpen(false)
+    setDataExpectedCount(0)
+    toast({
+      title: 'マスターデータの登録に失敗しました。',
+      description:
+        'タイムアウトしました。入力内容を確認した上で再度やり直してください。',
+      variant: 'destructive',
+    })
+    router.refresh()
+  })
+
+  // Track when all items are finished - Settings
   useEffect(() => {
-    if (finishedCount === 0 || expectedCount === 0) return
+    if (settingsFinishedCount === 0 || settingsExpectedCount === 0) return
 
     // Show toast for each completed item
     toast({
-      description: `登録しました (${finishedCount}/${expectedCount})`,
+      description: `マスター設定を登録しました (${settingsFinishedCount}/${settingsExpectedCount})`,
       variant: 'success',
     })
 
     // Check if all items are finished
-    if (finishedCount >= expectedCount) {
-      stop()
+    if (settingsFinishedCount >= settingsExpectedCount) {
+      stopSettings()
+      setSettingsExpectedCount(0)
+    }
+  }, [settingsFinishedCount, settingsExpectedCount, toast, stopSettings])
+
+  // Track when all items are finished - Data
+  useEffect(() => {
+    if (dataFinishedCount === 0 || dataExpectedCount === 0) return
+
+    // Show toast for each completed item
+    toast({
+      description: `マスターデータを登録しました (${dataFinishedCount}/${dataExpectedCount})`,
+      variant: 'success',
+    })
+
+    // Check if all items are finished
+    if (dataFinishedCount >= dataExpectedCount) {
+      stopData()
+      setDataExpectedCount(0)
+    }
+  }, [dataFinishedCount, dataExpectedCount, toast, stopData])
+
+  // Check if both operations complete
+  useEffect(() => {
+    const bothComplete =
+      (settingsExpectedCount === 0 ||
+        settingsFinishedCount >= settingsExpectedCount) &&
+      (dataExpectedCount === 0 || dataFinishedCount >= dataExpectedCount)
+
+    if (bothComplete && (settingsExpectedCount > 0 || dataExpectedCount > 0)) {
       setSubmitting(false)
       setOpen(false)
-      setExpectedCount(0)
+      setSettingsExpectedCount(0)
+      setDataExpectedCount(0)
 
       // Call onSave to refresh data
-      onSave(savedData)
+      onSave?.({
+        settings: savedSettingsData.length > 0 ? savedSettingsData : undefined,
+        data: savedDataData.length > 0 ? savedDataData : undefined,
+      })
     }
-  }, [finishedCount, expectedCount, savedData, onSave, toast, stop])
+  }, [
+    settingsFinishedCount,
+    settingsExpectedCount,
+    dataFinishedCount,
+    dataExpectedCount,
+    savedSettingsData,
+    savedDataData,
+    onSave,
+  ])
 
   const saveData = async () => {
-    const data = JSON.parse(value)
-    if (!isValidSettingJson(data)) {
+    let parsedData: any
+    try {
+      parsedData = JSON.parse(value)
+    } catch (error) {
       toast({
         title: 'JSON が無効です',
+        description: '正しいJSONフォーマットである必要があります。',
         variant: 'destructive',
       })
       return
     }
 
-    setSubmitting(true)
-    let res: SettingDataEntity[] | undefined = undefined
-    try {
-      res = (
-        await httpClient.post<SettingDataEntity[]>(
-          API_URLS.SETTING.CREATE_BULK,
-          {
-            items: data.map((item) => ({
-              ...item,
-              settingValue: {
-                ...item.attributes,
-              },
-            })),
-          }
-        )
-      ).data
-    } catch (error) {
-      console.error(error)
-      setSubmitting(false)
-      setExpectedCount(0)
-    }
-
-    if (!res?.[0].requestId) {
-      setSubmitting(false)
-      setExpectedCount(0)
+    if (!Array.isArray(parsedData)) {
       toast({
-        title: 'データ登録に失敗しました。',
-        description: '入力内容を確認した上で再度やり直してください。',
+        title: 'JSON が無効です',
+        description: '配列である必要があります。',
         variant: 'destructive',
       })
-    } else {
-      // Set expected count based on response length
-      setExpectedCount(res.length)
-      start(res[0].requestId)
-      setSavedData(
-        res.map((item) => ({ ...item, sk: removeSortKeyVersion(item.sk) }))
-      )
+      return
+    }
+
+    // Split data by type
+    const { settings, data: dataItems, invalid } = splitDataByType(parsedData)
+
+    if (invalid.length > 0) {
+      toast({
+        title: 'JSON が無効です',
+        description: `${invalid.length}個の項目が認識できませんでした。`,
+        variant: 'destructive',
+      })
+      return
+    }
+
+    if (settings.length === 0 && dataItems.length === 0) {
+      toast({ title: 'データがありません', variant: 'destructive' })
+      return
+    }
+
+    setSubmitting(true)
+
+    // Process Settings if present
+    if (settings.length > 0) {
+      if (!isValidSettingJson(settings)) {
+        toast({
+          title: 'マスター設定のJSONが無効です',
+          variant: 'destructive',
+        })
+        setSubmitting(false)
+        return
+      }
+
+      try {
+        const res = (
+          await httpClient.post<SettingDataEntity[]>(
+            API_URLS.SETTING.CREATE_BULK,
+            {
+              items: settings.map((item) => ({
+                ...item,
+                settingValue: {
+                  ...item.attributes,
+                },
+              })),
+            }
+          )
+        ).data
+
+        if (!res?.[0].requestId) {
+          toast({
+            title: 'マスター設定の登録に失敗しました。',
+            description: '入力内容を確認した上で再度やり直してください。',
+            variant: 'destructive',
+          })
+          setSubmitting(false)
+          return
+        } else {
+          setSettingsExpectedCount(res.length)
+          startSettings(res[0].requestId)
+          setSavedSettingsData(
+            res.map((item) => ({
+              ...item,
+              sk: removeSortKeyVersion(item.sk),
+            }))
+          )
+        }
+      } catch (error) {
+        console.error(error)
+        toast({
+          title: 'マスター設定の登録に失敗しました。',
+          description: 'サーバーエラーが発生しました。',
+          variant: 'destructive',
+        })
+        setSubmitting(false)
+        return
+      }
+    }
+
+    // Process Data if present
+    if (dataItems.length > 0) {
+      if (!isValidMasterDataJson(dataItems)) {
+        toast({
+          title: 'マスターデータのJSONが無効です',
+          variant: 'destructive',
+        })
+        setSubmitting(false)
+        return
+      }
+
+      try {
+        const res = (
+          await httpClient.post<DataSettingDataEntity[]>(
+            API_URLS.DATA.CREATE_BULK,
+            {
+              items: dataItems,
+            }
+          )
+        ).data
+
+        if (!res?.[0].requestId) {
+          toast({
+            title: 'マスターデータの登録に失敗しました。',
+            description: '入力内容を確認した上で再度やり直してください。',
+            variant: 'destructive',
+          })
+          setSubmitting(false)
+          return
+        } else {
+          setDataExpectedCount(res.length)
+          startData(res[0].requestId)
+          setSavedDataData(
+            res.map((item) => ({
+              ...item,
+              sk: removeSortKeyVersion(item.sk),
+            }))
+          )
+        }
+      } catch (error) {
+        console.error(error)
+        toast({
+          title: 'マスターデータの登録に失敗しました。',
+          description: 'サーバーエラーが発生しました。',
+          variant: 'destructive',
+        })
+        setSubmitting(false)
+        return
+      }
     }
   }
 
   useEffect(() => {
-    setValue(jsonValue || sampleSettingJson)
+    setValue(jsonValue || sampleMixedJson)
   }, [jsonValue])
 
   return (
