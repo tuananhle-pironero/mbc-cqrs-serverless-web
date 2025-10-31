@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.22](https://github.com/mbc-net/mbc-cqrs-serverless-web/compare/v0.0.21...v0.0.22) (2025-10-31)
+
+### Features
+
+- enhance master setting import data, setting ([b30bdba](https://github.com/mbc-net/mbc-cqrs-serverless-web/commit/b30bdba88da4d892bdb158a766422c1b1dc636ad))
+
 ## [0.0.21](https://github.com/mbc-net/mbc-cqrs-serverless-web/compare/v0.0.20...v0.0.21) (2025-10-29)
 
 ### Features
