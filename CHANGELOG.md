@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.23](https://github.com/mbc-net/mbc-cqrs-serverless-web/compare/v0.0.22...v0.0.23) (2025-11-04)
+
+### Features
+
+- enhance AddJsonData component with mapping functionality and validation for bulk data import ([8e10a5d](https://github.com/mbc-net/mbc-cqrs-serverless-web/commit/8e10a5d7da71683adbe5f5802f9aef469af25fd7))
+
 ## [0.0.22](https://github.com/mbc-net/mbc-cqrs-serverless-web/compare/v0.0.21...v0.0.22) (2025-10-31)
 
 ### Features
