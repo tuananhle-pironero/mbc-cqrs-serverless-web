@@ -22,6 +22,29 @@ import {
 } from '../schema'
 import JSONEditorComponent from '../../../components/JSONEditorComponent'
 
+// Mapping types for developer-provided mapper
+export type MappedSetting = {
+  kind: 'setting'
+  value: {
+    name: string
+    code: string
+    tenantCode?: string
+    settingValue: Record<string, any>
+  }
+}
+export type MappedData = {
+  kind: 'data'
+  value: {
+    settingCode: string
+    code: string
+    name: string
+    seq: number
+    attributes: Record<string, any>
+    tenantCode?: string
+  }
+}
+export type MapResult = MappedSetting | MappedData
+
 // Detection functions to identify item types
 function isMasterSettingsItem(item: any): boolean {
   return (
@@ -84,6 +107,7 @@ function ModalContent({
   saveData,
   onCloseModal,
   submitting,
+  relaxedSchema,
 }: {
   open: boolean
   value: string
@@ -92,6 +116,7 @@ function ModalContent({
   setValue: Dispatch<SetStateAction<string>>
   saveData: () => void
   onCloseModal?: () => void
+  relaxedSchema?: boolean
 }) {
   useEffect(() => {
     if (!submitting && !open) {
@@ -105,78 +130,84 @@ function ModalContent({
         <JSONEditorComponent
           text={value}
           onChangeText={(json) => setValue(json)}
-          schema={{
-            type: 'array',
-            items: {
-              oneOf: [
-                {
-                  // Master Settings schema
-                  type: 'object',
-                  properties: {
-                    code: { type: 'string' },
-                    name: { type: 'string' },
-                    attributes: { $ref: '#/definitions/settingsAttributes' },
+          schema={
+            relaxedSchema
+              ? { type: 'array', items: { type: 'object' } }
+              : {
+                  type: 'array',
+                  items: {
+                    oneOf: [
+                      {
+                        type: 'object',
+                        properties: {
+                          code: { type: 'string' },
+                          name: { type: 'string' },
+                          attributes: {
+                            $ref: '#/definitions/settingsAttributes',
+                          },
+                        },
+                        required: ['code', 'name', 'attributes'],
+                      },
+                      {
+                        type: 'object',
+                        properties: {
+                          settingCode: { type: 'string' },
+                          code: { type: 'string' },
+                          name: { type: 'string' },
+                          seq: { type: 'number' },
+                          attributes: { type: 'object' },
+                        },
+                        required: [
+                          'settingCode',
+                          'code',
+                          'name',
+                          'seq',
+                          'attributes',
+                        ],
+                      },
+                    ],
                   },
-                  required: ['code', 'name', 'attributes'],
-                },
-                {
-                  // Master Data schema
-                  type: 'object',
-                  properties: {
-                    settingCode: { type: 'string' },
-                    code: { type: 'string' },
-                    name: { type: 'string' },
-                    seq: { type: 'number' },
-                    attributes: { type: 'object' },
+                  definitions: {
+                    settingsAttributes: {
+                      type: 'object',
+                      properties: {
+                        description: { type: 'string' },
+                        fields: {
+                          type: 'array',
+                          items: { $ref: '#/definitions/fields' },
+                        },
+                      },
+                      required: ['fields'],
+                    },
+                    fields: {
+                      type: 'object',
+                      properties: {
+                        physicalName: { type: 'string' },
+                        name: { type: 'string' },
+                        description: { type: 'string' },
+                        dataType: {
+                          enum: ['string', 'number', 'json', 'date'],
+                        },
+                        min: { type: 'string' },
+                        max: { type: 'string' },
+                        length: { type: 'string' },
+                        maxRow: { type: 'number' },
+                        defaultValue: { type: 'string' },
+                        isRequired: { type: 'boolean' },
+                        isShowedOnList: { type: 'boolean' },
+                        dataFormat: { type: 'string' },
+                      },
+                      required: [
+                        'physicalName',
+                        'name',
+                        'dataType',
+                        'isRequired',
+                        'isShowedOnList',
+                      ],
+                    },
                   },
-                  required: [
-                    'settingCode',
-                    'code',
-                    'name',
-                    'seq',
-                    'attributes',
-                  ],
-                },
-              ],
-            },
-            definitions: {
-              settingsAttributes: {
-                type: 'object',
-                properties: {
-                  description: { type: 'string' },
-                  fields: {
-                    type: 'array',
-                    items: { $ref: '#/definitions/fields' },
-                  },
-                },
-                required: ['fields'],
-              },
-              fields: {
-                type: 'object',
-                properties: {
-                  physicalName: { type: 'string' },
-                  name: { type: 'string' },
-                  description: { type: 'string' },
-                  dataType: { enum: ['string', 'number', 'json', 'date'] },
-                  min: { type: 'string' },
-                  max: { type: 'string' },
-                  length: { type: 'string' },
-                  maxRow: { type: 'number' },
-                  defaultValue: { type: 'string' },
-                  isRequired: { type: 'boolean' },
-                  isShowedOnList: { type: 'boolean' },
-                  dataFormat: { type: 'string' },
-                },
-                required: [
-                  'physicalName',
-                  'name',
-                  'dataType',
-                  'isRequired',
-                  'isShowedOnList',
-                ],
-              },
-            },
-          }}
+                }
+          }
         />
       </div>
       <div className="flex justify-end gap-2">
@@ -235,10 +266,14 @@ function TriggerButton({
 export default function AddJsonData({
   tenantCode,
   jsonValue,
+  inputSampleJson,
+  mapRawItem,
   onSave,
 }: {
   tenantCode: string
   jsonValue?: string
+  inputSampleJson?: string
+  mapRawItem?: (raw: unknown) => MapResult | null | undefined
   onSave?: (result: {
     settings?: SettingDataEntity[]
     data?: DataSettingDataEntity[]
@@ -258,12 +293,14 @@ export default function AddJsonData({
   const [settingsExpectedCount, setSettingsExpectedCount] = useState(0)
   const [dataExpectedCount, setDataExpectedCount] = useState(0)
   const httpClient = useHttpClient()
+  const [settingsTenant, setSettingsTenant] = useState<string>(tenantCode)
+  const [dataTenant, setDataTenant] = useState<string>(tenantCode)
 
   const {
     start: startSettings,
     stop: stopSettings,
     finishedCount: settingsFinishedCount,
-  } = useSubscribeBulkCommandStatus(tenantCode, () => {
+  } = useSubscribeBulkCommandStatus(settingsTenant, () => {
     // Timeout callback for Settings
     setSubmitting(false)
     setOpen(false)
@@ -281,7 +318,7 @@ export default function AddJsonData({
     start: startData,
     stop: stopData,
     finishedCount: dataFinishedCount,
-  } = useSubscribeBulkCommandStatus(tenantCode, () => {
+  } = useSubscribeBulkCommandStatus(dataTenant, () => {
     // Timeout callback for Data
     setSubmitting(false)
     setOpen(false)
@@ -377,6 +414,155 @@ export default function AddJsonData({
         description: '配列である必要があります。',
         variant: 'destructive',
       })
+      return
+    }
+
+    // If mapper provided, transform first
+    if (mapRawItem) {
+      const mapped = parsedData
+        .map((item: any) => mapRawItem(item))
+        .filter(Boolean) as MapResult[]
+
+      const mappedSettings = mapped
+        .filter((m) => m.kind === 'setting')
+        .map((m) => (m as MappedSetting).value)
+      const mappedData = mapped
+        .filter((m) => m.kind === 'data')
+        .map((m) => (m as MappedData).value)
+
+      if (mappedSettings.length === 0 && mappedData.length === 0) {
+        toast({ title: 'データがありません', variant: 'destructive' })
+        return
+      }
+
+      // Basic validation for mapped settings
+      const invalidSettings = mappedSettings.filter(
+        (x) =>
+          !x ||
+          typeof x.name !== 'string' ||
+          typeof x.code !== 'string' ||
+          typeof x.settingValue !== 'object'
+      )
+      if (invalidSettings.length > 0) {
+        toast({
+          title: 'マッピング結果が無効です',
+          description:
+            '設定データの name, code は文字列、settingValue はオブジェクトである必要があります。',
+          variant: 'destructive',
+        })
+        return
+      }
+
+      // Basic validation for mapped data
+      const invalidData = mappedData.filter(
+        (x) =>
+          !x ||
+          typeof x.settingCode !== 'string' ||
+          typeof x.code !== 'string' ||
+          typeof x.name !== 'string' ||
+          typeof x.seq !== 'number' ||
+          typeof x.attributes !== 'object'
+      )
+      if (invalidData.length > 0) {
+        toast({
+          title: 'マッピング結果が無効です',
+          description:
+            'データの settingCode, code, name は文字列、seq は数値、attributes はオブジェクトである必要があります。',
+          variant: 'destructive',
+        })
+        return
+      }
+
+      setSubmitting(true)
+
+      // Process mapped settings
+      if (mappedSettings.length > 0) {
+        try {
+          const res = (
+            await httpClient.post<SettingDataEntity[]>(
+              API_URLS.SETTING.CREATE_BULK,
+              {
+                items: mappedSettings,
+              }
+            )
+          ).data
+
+          if (!res?.[0]?.requestId) {
+            toast({
+              title: 'マスター設定の登録に失敗しました。',
+              description: '入力内容を確認した上で再度やり直してください。',
+              variant: 'destructive',
+            })
+            setSubmitting(false)
+            return
+          }
+          // Switch listening tenant to mapped tenant if provided
+          const mappedTenant = mappedSettings[0]?.tenantCode || tenantCode
+          setSettingsTenant(mappedTenant)
+          setSettingsExpectedCount(res.length)
+          startSettings(res[0].requestId)
+          setSavedSettingsData(
+            res.map((item) => ({
+              ...item,
+              sk: removeSortKeyVersion(item.sk),
+            }))
+          )
+        } catch (error) {
+          console.error(error)
+          toast({
+            title: 'マスター設定の登録に失敗しました。',
+            description: 'サーバーエラーが発生しました。',
+            variant: 'destructive',
+          })
+          setSubmitting(false)
+          return
+        }
+      }
+
+      // Process mapped data
+      if (mappedData.length > 0) {
+        try {
+          const res = (
+            await httpClient.post<DataSettingDataEntity[]>(
+              API_URLS.DATA.CREATE_BULK,
+              {
+                items: mappedData,
+              }
+            )
+          ).data
+
+          if (!res?.[0]?.requestId) {
+            toast({
+              title: 'マスターデータの登録に失敗しました。',
+              description: '入力内容を確認した上で再度やり直してください。',
+              variant: 'destructive',
+            })
+            setSubmitting(false)
+            return
+          }
+          // Switch listening tenant to mapped tenant if provided
+          const mappedTenant = mappedData[0]?.tenantCode || tenantCode
+          setDataTenant(mappedTenant)
+          setDataExpectedCount(res.length)
+          startData(res[0].requestId)
+          setSavedDataData(
+            res.map((item) => ({
+              ...item,
+              sk: removeSortKeyVersion(item.sk),
+            }))
+          )
+        } catch (error) {
+          console.error(error)
+          toast({
+            title: 'マスターデータの登録に失敗しました。',
+            description: 'サーバーエラーが発生しました。',
+            variant: 'destructive',
+          })
+          setSubmitting(false)
+          return
+        }
+      }
+
       return
     }
 
@@ -508,8 +694,8 @@ export default function AddJsonData({
   }
 
   useEffect(() => {
-    setValue(jsonValue || sampleMixedJson)
-  }, [jsonValue])
+    setValue(jsonValue || inputSampleJson || sampleMixedJson)
+  }, [jsonValue, inputSampleJson])
 
   return (
     <Modal>
@@ -524,6 +710,7 @@ export default function AddJsonData({
           setOpen={setOpen}
           saveData={saveData}
           setValue={setValue}
+          relaxedSchema={Boolean(mapRawItem)}
         />
       </Modal.Window>
     </Modal>

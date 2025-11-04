@@ -11,7 +11,6 @@ import { Search } from 'lucide-react'
 import { CommonButton } from '../../../components/buttons'
 import { BackButton } from '../../../components/buttons/back-button'
 import { DataTable } from '../../../components/table/data-table'
-import SortIndicator from '../../../components/table/sort-indicator'
 import { Button } from '../../../components/ui/button'
 import {
   Form,
@@ -37,18 +36,54 @@ import { MasterRdsEntity } from '../../../types/MasterRdsEntity'
 import { MasterRdsListEntity } from '../../../types/MasterRdsListEntity'
 import { PaginateProps } from '../../../types/pagination'
 import { DataTableColumnHeader } from '../../../components/table/data-table-column-header'
-import AddJsonData from '../components/AddJsonData'
-import { toast } from 'src/components/ui/use-toast'
+import AddJsonData, { MapResult } from '../components/AddJsonData'
 import '../../../components/JsonEditor'
 
-export default function MasterSetting() {
+// Re-export mapper types for external usage
+export type {
+  MapResult,
+  MappedSetting,
+  MappedData,
+} from '../components/AddJsonData'
+
+// type MappedSetting = {
+//   kind: 'setting'
+//   value: {
+//     name: string
+//     code: string
+//     tenantCode?: string
+//     settingValue: Record<string, any>
+//   }
+// }
+
+// type MappedData = {
+//   kind: 'data'
+//   value: {
+//     settingCode: string
+//     code: string
+//     name: string
+//     seq: number
+//     attributes: Record<string, any>
+//     tenantCode?: string
+//   }
+// }
+
+// type MapResult = MappedSetting | MappedData
+
+export default function MasterSetting({
+  inputSampleJson,
+  mapRawItem,
+}: {
+  inputSampleJson?: string
+  mapRawItem?: (raw: unknown) => MapResult | null | undefined
+}) {
   const user = useUserContext()
   const tenantCode = user.tenantCode
   const urlProvider = useUrlProvider()
 
   const httpClient = useHttpClient()
 
-  const { loading, loadingStore, control, handleSubmit, reset, errors } =
+  const { loadingStore, control, handleSubmit } =
     useLoadingForm<SearchPropsMasterSetting>({
       defaultValues: {
         code: '',
@@ -283,6 +318,8 @@ export default function MasterSetting() {
       <div className="mx-3 mb-2 flex justify-end gap-2 pt-3">
         <AddJsonData
           tenantCode={tenantCode}
+          inputSampleJson={inputSampleJson}
+          mapRawItem={mapRawItem}
           onSave={async () => {
             // Refresh data after all items are successfully created
             await initSearch()

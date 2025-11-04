@@ -65,7 +65,7 @@ const genPlaceholder = (fieldType: string) => {
 
 const getDescription = (code: string, setting: SettingDataEntity) =>
   setting.attributes.fields.find((field) => field.physicalName === code)
-    .description
+    ?.description ?? ''
 
 export default function EditMasterData() {
   const user = useUserContext()
