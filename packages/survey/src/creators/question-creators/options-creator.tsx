@@ -51,7 +51,7 @@ const SortableOption: React.FC<{
   showBranching,
   removeOption,
 }) => {
-  const { control, register, watch } = useFormContext()
+  const { control, register, watch, setValue } = useFormContext()
 
   const allItems: SurveyItemType[] = watch('items')
   const sectionHeaders = allItems.filter(
@@ -78,7 +78,14 @@ const SortableOption: React.FC<{
       <div className="flex-1">
         <Input
           placeholder={`オプション ${index + 1}`} // "Option ${index + 1}"
-          {...register(`items.${itemIndex}.options.${index}.label`)}
+          {...register(`items.${itemIndex}.options.${index}.label`, {
+            onChange: (e) => {
+              setValue(
+                `items.${itemIndex}.options.${index}.value`,
+                e.target.value
+              )
+            },
+          })}
         />
       </div>
 
@@ -173,8 +180,7 @@ export const OptionsCreator: React.FC<OptionsCreatorProps> = ({
 
   const addOption = () => {
     const newLabel = `オプション ${optionFields.length + 1}` // "Option ${optionFields.length + 1}"
-    const newValue = newLabel.toLowerCase().replace(/\s+/g, '-')
-    appendOption({ label: newLabel, value: newValue })
+    appendOption({ label: newLabel, value: newLabel })
   }
 
   return (
