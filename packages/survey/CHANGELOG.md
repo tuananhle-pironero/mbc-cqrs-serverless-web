@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.24](https://github.com/mbc-net/mbc-cqrs-serverless-web/compare/v0.0.23...v0.0.24) (2025-11-06)
+
+### Features
+
+- update options handling in OptionsCreator to synchronize label and value fields ([21e2459](https://github.com/mbc-net/mbc-cqrs-serverless-web/commit/21e2459963cc23ddf8a43f9ec857f223f3e1500c))
+
 ## [0.0.23](https://github.com/mbc-net/mbc-cqrs-serverless-web/compare/v0.0.22...v0.0.23) (2025-11-04)
 
 **Note:** Version bump only for package @mbc-cqrs-serverless/survey-web
