@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.25](https://github.com/mbc-net/mbc-cqrs-serverless-web/compare/v0.0.24...v0.0.25) (2025-11-06)
+
+### Features
+
+- update japanese placeholder text in dropdown and long-text components ([a9baaee](https://github.com/mbc-net/mbc-cqrs-serverless-web/commit/a9baaee42d2bb48611c10792f2f7cc59a49f9445))
+
 ## [0.0.24](https://github.com/mbc-net/mbc-cqrs-serverless-web/compare/v0.0.23...v0.0.24) (2025-11-06)
 
 ### Features
