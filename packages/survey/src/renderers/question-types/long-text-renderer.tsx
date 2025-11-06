@@ -70,7 +70,7 @@ export const LongTextQuestionComponent: React.FC<{
           <Textarea
             {...field}
             id={question.id}
-            placeholder="Type your answer here..."
+            placeholder="ここに回答を入力してください..." // Type your answer here...
             className="min-h-[120px] resize-y"
             rows={5}
           />

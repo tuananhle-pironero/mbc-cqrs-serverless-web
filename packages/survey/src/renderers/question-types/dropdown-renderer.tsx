@@ -56,8 +56,8 @@ export const DropdownQuestionComponent: React.FC<{
         >
           <Select onValueChange={field.onChange} value={field.value}>
             <SelectTrigger>
-              <SelectValue placeholder="オプションを選択してください..." /> //
-              Choose an option...
+              <SelectValue placeholder="オプションを選択してください..." />{' '}
+              {/* Choose an option... */}
             </SelectTrigger>
             <SelectContent>
               {shuffledOptions.map((option) => (
