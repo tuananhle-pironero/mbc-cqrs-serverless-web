@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.26](https://github.com/mbc-net/mbc-cqrs-serverless-web/compare/v0.0.25...v0.0.26) (2025-11-10)
+
+### Features
+
+- enhance SurveyForm component with children support and disabled state handling ([753be86](https://github.com/mbc-net/mbc-cqrs-serverless-web/commit/753be86da22bfbce0fc32545c15a2e0b94239111))
+
 ## [0.0.25](https://github.com/mbc-net/mbc-cqrs-serverless-web/compare/v0.0.24...v0.0.25) (2025-11-06)
 
 ### Features
