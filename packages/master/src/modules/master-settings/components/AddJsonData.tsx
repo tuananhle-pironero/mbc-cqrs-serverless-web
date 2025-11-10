@@ -4,6 +4,7 @@ import { SaveIcon } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { AxiosError } from 'axios'
 import DownloadJSONButton from '../../../components/buttons/DownloadJSONButton'
 import ImportJSONButton from '../../../components/buttons/ImportJSONButton'
 import Modal from '../../../components/DragResizeModal'
@@ -21,6 +22,25 @@ import {
   sampleSettingJson,
 } from '../schema'
 import JSONEditorComponent from '../../../components/JSONEditorComponent'
+import { ExceptionBase } from '../../../exceptions/exception-base'
+
+// Helper function to extract error message from API errors
+function getErrorMessage(error: unknown): string {
+  if (error instanceof ExceptionBase) {
+    return error.getErrorMessage() || 'サーバーエラーが発生しました。'
+  }
+  if (error instanceof AxiosError) {
+    const message = error.response?.data?.message
+    if (message) {
+      return message
+    }
+    return 'サーバーエラーが発生しました。'
+  }
+  if (error instanceof Error) {
+    return error.message || 'サーバーエラーが発生しました。'
+  }
+  return 'サーバーエラーが発生しました。'
+}
 
 // Mapping types for developer-provided mapper
 export type MappedSetting = {
@@ -368,12 +388,23 @@ export default function AddJsonData({
 
   // Check if both operations complete
   useEffect(() => {
-    const bothComplete =
-      (settingsExpectedCount === 0 ||
-        settingsFinishedCount >= settingsExpectedCount) &&
-      (dataExpectedCount === 0 || dataFinishedCount >= dataExpectedCount)
+    // Check if Settings are complete (either not started or all finished)
+    const settingsComplete =
+      settingsExpectedCount === 0 ||
+      (settingsExpectedCount > 0 &&
+        settingsFinishedCount >= settingsExpectedCount)
 
-    if (bothComplete && (settingsExpectedCount > 0 || dataExpectedCount > 0)) {
+    // Check if Data are complete (either not started or all finished)
+    const dataComplete =
+      dataExpectedCount === 0 ||
+      (dataExpectedCount > 0 && dataFinishedCount >= dataExpectedCount)
+
+    // Only proceed if at least one operation was started and both are complete
+    const hasStartedOperation =
+      settingsExpectedCount > 0 || dataExpectedCount > 0
+    const bothComplete = settingsComplete && dataComplete
+
+    if (bothComplete && hasStartedOperation && submitting) {
       setSubmitting(false)
       setOpen(false)
       setSettingsExpectedCount(0)
@@ -393,6 +424,7 @@ export default function AddJsonData({
     savedSettingsData,
     savedDataData,
     onSave,
+    submitting,
   ])
 
   const saveData = async () => {
@@ -509,9 +541,10 @@ export default function AddJsonData({
           )
         } catch (error) {
           console.error(error)
+          const errorMessage = getErrorMessage(error)
           toast({
             title: 'マスター設定の登録に失敗しました。',
-            description: 'サーバーエラーが発生しました。',
+            description: errorMessage,
             variant: 'destructive',
           })
           setSubmitting(false)
@@ -553,9 +586,10 @@ export default function AddJsonData({
           )
         } catch (error) {
           console.error(error)
+          const errorMessage = getErrorMessage(error)
           toast({
             title: 'マスターデータの登録に失敗しました。',
-            description: 'サーバーエラーが発生しました。',
+            description: errorMessage,
             variant: 'destructive',
           })
           setSubmitting(false)
@@ -631,9 +665,10 @@ export default function AddJsonData({
         }
       } catch (error) {
         console.error(error)
+        const errorMessage = getErrorMessage(error)
         toast({
           title: 'マスター設定の登録に失敗しました。',
-          description: 'サーバーエラーが発生しました。',
+          description: errorMessage,
           variant: 'destructive',
         })
         setSubmitting(false)
@@ -682,9 +717,10 @@ export default function AddJsonData({
         }
       } catch (error) {
         console.error(error)
+        const errorMessage = getErrorMessage(error)
         toast({
           title: 'マスターデータの登録に失敗しました。',
-          description: 'サーバーエラーが発生しました。',
+          description: errorMessage,
           variant: 'destructive',
         })
         setSubmitting(false)
