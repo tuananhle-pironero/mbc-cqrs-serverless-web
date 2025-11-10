@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.27](https://github.com/mbc-net/mbc-cqrs-serverless-web/compare/v0.0.26...v0.0.27) (2025-11-10)
+
+### Features
+
+- add error handling for API responses in AddJsonData component ([6dcdf26](https://github.com/mbc-net/mbc-cqrs-serverless-web/commit/6dcdf263268a64eb01b685dc1736e671ce2097d6))
+- improve ImportJSONButton to handle file reading errors and allow re-selection of the same file ([025937c](https://github.com/mbc-net/mbc-cqrs-serverless-web/commit/025937c0717d531bcb633a25a9e8c216d3f96d62))
+
 ## [0.0.26](https://github.com/mbc-net/mbc-cqrs-serverless-web/compare/v0.0.25...v0.0.26) (2025-11-10)
 
 **Note:** Version bump only for package @mbc-cqrs-serverless/master-web
