@@ -17,11 +17,14 @@ import type {
   SurveyQuestionItemType,
   SurveySchemaType,
 } from '../types/schema' // Corrected import path
+import { cn } from '@/utils'
 
 type SurveyAnswers = Record<string, string | string[] | undefined>
 interface SurveyFormProps {
   schema: SurveySchemaType
   onSubmit: (answers: SurveyAnswers) => void
+  children?: React.ReactNode
+  disabled?: boolean
 }
 
 interface SurveyPage {
@@ -33,7 +36,12 @@ interface SurveyPage {
 }
 
 // --- Main Component ---
-export const SurveyForm: React.FC<SurveyFormProps> = ({ schema, onSubmit }) => {
+export const SurveyForm: React.FC<SurveyFormProps> = ({
+  schema,
+  onSubmit,
+  children,
+  disabled = false,
+}) => {
   const methods = useForm<SurveyAnswers>()
   const { handleSubmit, trigger, getValues, watch } = methods
 
@@ -171,7 +179,10 @@ export const SurveyForm: React.FC<SurveyFormProps> = ({ schema, onSubmit }) => {
     <FormProvider {...methods}>
       <form
         onSubmit={handleSubmit(onFormSubmit)}
-        className="mx-auto my-12 max-w-3xl space-y-8"
+        className={cn(
+          'mx-auto my-12 max-w-3xl space-y-8',
+          disabled && 'pointer-events-none opacity-50'
+        )}
       >
         <div className="mb-10 text-center">
           <h1 className="text-4xl font-bold tracking-tight">{schema.title}</h1>
@@ -191,6 +202,8 @@ export const SurveyForm: React.FC<SurveyFormProps> = ({ schema, onSubmit }) => {
               {currentSection.description}
             </p>
           )}
+
+          {children}
 
           {currentSection.questions.map((question) => {
             switch (question.type) {
@@ -275,6 +288,7 @@ export const SurveyForm: React.FC<SurveyFormProps> = ({ schema, onSubmit }) => {
               <Button
                 type="button"
                 key="submit-btn"
+                disabled={disabled}
                 onClick={handleSubmit(onFormSubmit)}
               >
                 {/* Submit Survey */}

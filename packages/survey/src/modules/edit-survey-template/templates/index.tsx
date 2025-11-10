@@ -68,7 +68,7 @@ export function EditSurveyTemplatePage() {
           }
           onSubmit={handleSubmit}
           submitButtonRef={submitButtonRef}
-          disabled={false}
+          disabled={isSubmitting || isDeleting}
           onSchemaChange={setCurrentSchema}
         />
         <SurveyFormActionButtons
