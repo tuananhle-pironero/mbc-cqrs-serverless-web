@@ -12,13 +12,25 @@ export default function ImportJSONButton({ disabled, onAdd }: Props) {
   const fileRef = useRef<HTMLInputElement>(null)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
     const fileReader = new FileReader()
+    const inputElement = e.target
 
-    fileReader.readAsText(e.target.files?.[0] as File, 'UTF-8')
+    fileReader.readAsText(file, 'UTF-8')
 
-    fileReader.onload = (e: ProgressEvent<FileReader>) => {
-      const fileContent = e.target?.result as string
+    fileReader.onload = (event: ProgressEvent<FileReader>) => {
+      const fileContent = event.target?.result as string
       onAdd(fileContent)
+      // Reset the input value to allow selecting the same file again
+      inputElement.value = ''
+    }
+
+    fileReader.onerror = () => {
+      console.error('Error reading file')
+      // Reset the input value even on error
+      inputElement.value = ''
     }
   }
 
